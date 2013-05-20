@@ -1,4 +1,4 @@
-a0860b192130ff798e90e835da0f7488 *DESCRIPTION
+9aace9dc459125054961ce380b54a1f7 *DESCRIPTION
 c979df8a1a6079a3df17df906333b174 *NAMESPACE
 d4fc28a68628e6f336b4ac407db73cee *R/msgl_multinomial.R
 b3847a38c55f87ae3c5a2d87e14c04e5 *data/SimData.RData
@@ -11,7 +11,7 @@ c0e72cbc4a210e1f942bc9b60becddfc *man/msgl.subsampling.Rd
 4592ec54d5ed1bf4e7e540b75f9151b9 *man/sgl.algorithm.config.Rd
 e119168892500c3c5d13d1c49a917994 *man/sgl.standard.config.Rd
 231f4332928f430adfd15e7139ca5f72 *man/sim.data.Rd
-728a770519aa0cb95918f53299a69be0 *src/Makevars
+00bf17d276bfcd1278fbf85eed47997e *src/Makevars
 edfab91b24fd81f8cdc44139b5b09e81 *src/include/Indices/GroupedIndices.h
 252e6181c3b1c6f66982ddf28471275e *src/include/Indices/Indices.h
 d3d67366c63d712d9b47d2e2214346df *src/include/Indices/IntegerSet.h
