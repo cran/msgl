@@ -249,8 +249,8 @@ inline boost::tuple<field<typename Predictor::response_type>, sgl::vector,
 	field<typename Predictor::response_type> response(
 			objective_type.data.n_samples, lambda_sequence.n_elem);
 
-	sgl::vector average_number_of_features(lambda_sequence.n_elem);
-	sgl::vector average_number_of_parameters(lambda_sequence.n_elem);
+	sgl::vector average_number_of_features = zeros<sgl::vector>(lambda_sequence.n_elem);
+	sgl::vector average_number_of_parameters = zeros<sgl::vector>(lambda_sequence.n_elem);
 
 	//Training indices
 	field<Indices> training_indices(cv_indices.n_elem);

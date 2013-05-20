@@ -38,11 +38,16 @@
 //#define SGL_DEBUG_SIMPLE
 //#define SGL_DEBUG_COMPLEX
 //#define SGL_DEBUG_INFO_ALL
+#define PRINT_BACKTRANCE
 //#define SGL_DEBUG_INFO_STEPSIZE
 #else
 // Do no debugging
 #define ARMA_NO_DEBUG
 #define NDEBUG
+#endif
+
+#ifdef PRINT_BACKTRANCE
+#include <Backtrace.h>
 #endif
 
 #include <armadillo>

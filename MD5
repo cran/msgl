@@ -1,4 +1,4 @@
-70289f5ab97264b589284ecf3f5f5530 *DESCRIPTION
+9647dde37e8daa706eaa0287d1a4ed59 *DESCRIPTION
 c979df8a1a6079a3df17df906333b174 *NAMESPACE
 a0709e290db60b6f44591a7719b46457 *R/msgl_multinomial.R
 b3847a38c55f87ae3c5a2d87e14c04e5 *data/SimData.RData
@@ -24,7 +24,7 @@ edfab91b24fd81f8cdc44139b5b09e81 *src/include/Indices/GroupedIndices.h
 e27285376b2324e91fdb332f0c24c05e *src/include/msgl/msgl_multinomial_predictor.h
 18e06e4b1c4257e1f3d9873e9ec07948 *src/include/msgl/msgl_multinomial_response.h
 a35f5bde8cfc5c151827be927d141183 *src/include/msgl/msgl_multinomial_weighted_sparse.h
-c0116d53c185218b0d940aa410c3a621 *src/include/msgl_R_interface.h
+1c83ec2381845d049dcd2dc2bc0ea50d *src/include/msgl_R_interface.h
 500d81039d7ae64705773cd3a43064a2 *src/include/rtools.h
 ef9bbb971f5b59f8858998419aa8def9 *src/include/rtools/get_value.h
 a0f9ad03d45c710d27fe5ac49e4cf20f *src/include/rtools/rList.h
@@ -39,7 +39,7 @@ b47cc772715b5961c5d2b4b82613ca52 *src/include/sgl/SglOptimizer.h
 d29f9770e080955a8e7a3f7df7f8ac14 *src/include/sgl/SglProblem.h
 848823c297f6d13ad106c0fb99f8375c *src/include/sgl/arma_additions.h
 705e2676f1271282026ad8771ba3fcc9 *src/include/sgl/config.h
-a05fa348c618f3f151ded29bf89060db *src/include/sgl/interface_basic.h
+de1555826f17807afbc4f49af8259e59 *src/include/sgl/interface_basic.h
 747513f1435f04641f385b51a87761c7 *src/include/sgl/numeric.h
 a954b3570e7f2d4059268183e530fab9 *src/include/sgl/simple_timer.h
 e8893f854d0b8be6111612a85181d031 *src/include/sgl/tools.h
