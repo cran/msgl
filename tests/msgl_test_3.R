@@ -7,7 +7,7 @@ x <- sim.data$x
 classes <- sim.data$classes
 
 ## Lambda sequence
-lambda <- msgl.lambda.seq(x, classes, alpha = .5, d = 100L, lambda.min = 0.01, standardize = FALSE)
+lambda <- msgl.lambda.seq(x, classes, alpha = .5, d = 25L, lambda.min = 0.05, standardize = FALSE)
 
 ## Sparse Group lasso
 
@@ -16,4 +16,4 @@ fit1a <- msgl(x, classes, alpha = .5, lambda = lambda, standardize = FALSE)
 # (Forced) Sparse x
 fit1b <- msgl(x, classes, alpha = .5, lambda = lambda, sparse.data = TRUE, standardize = FALSE)
 
-if(max(abs(fit1a$beta[[100]]-fit1b$beta[[100]])) > 1e-10) stop()
+if(max(abs(fit1a$beta[[25]]-fit1b$beta[[25]])) > 1e-10) stop()

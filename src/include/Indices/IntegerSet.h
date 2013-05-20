@@ -20,13 +20,15 @@
 #ifndef INTEGERSET_H
 #define	INTEGERSET_H
 
-#include "boost/random.hpp"
+#include <boost/random/mersenne_twister.hpp>
+#include <boost/random/uniform_int.hpp>
+#include <boost/random/variate_generator.hpp>
 
 #include <string>
 #include <iostream>
 using namespace std;
 
-#include "../armadillo.hpp"
+#include <armadillo>
 using namespace arma;
 
 template <typename E>

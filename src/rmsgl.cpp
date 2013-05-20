@@ -19,18 +19,13 @@
 //Configuration
 
 //Debugging
-#define ARMA_NO_DEBUG
-#define SGL_DIM_CHECKS
-//#define SGL_DEBUG_SIMPLE
-//#define SGL_DEBUG_COMPLEX
-//#define SGL_DEBUG_INFO_ALL
-//#define DEBUG_BACKTRACE
-
-//#define SGL_DEBUG_INFO_STEPSIZE
-//#define SGL_DEBUG_INFO_QUADRATIC
+//#define SGL_DEBUG
 
 //Runtime checking for numerical problems
 #define SGL_RUNTIME_CHECKS
+
+//Check dimension of input objects
+#define SGL_DIM_CHECKS
 
 //Converges checks
 #define SGL_CONVERGENCE_CHECK
@@ -61,5 +56,5 @@ void report_error(const char *msg);
 #include <memory>
 
 void report_error(const char *msg) {
-	R::Rf_error(msg);
+	Rf_error(msg);
 }

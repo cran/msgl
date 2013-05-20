@@ -97,7 +97,7 @@
 data(SimData)
 x <- sim.data$x
 classes <- sim.data$classes
-lambda <- msgl.lambda.seq(x, classes, alpha = .5, d = 50L, lambda.min = 0.03)
+lambda <- msgl.lambda.seq(x, classes, alpha = .5, d = 25L, lambda.min = 0.03)
 fit.cv <- msgl.cv(x, classes, alpha = .5, lambda = lambda)
 
 # Missclassification count

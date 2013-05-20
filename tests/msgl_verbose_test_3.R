@@ -10,7 +10,7 @@ config.verbose <- sgl.algorithm.config(verbose = TRUE)
 
 ## Lambda sequence
 
-lambda <- msgl.lambda.seq(x, classes, alpha = .5, d = 100L, lambda.min = 0.01, standardize = TRUE)
+lambda <- msgl.lambda.seq(x, classes, alpha = .5, d = 25L, lambda.min = 0.05, standardize = TRUE)
 
 # msgl.subsampling
 test <- replicate(2, 1:20, simplify = FALSE)

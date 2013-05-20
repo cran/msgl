@@ -41,7 +41,7 @@
 #' x <- sim.data$x
 #' classes <- sim.data$classes
 #' lambda <- msgl.lambda.seq(x, classes, alpha = .5, d = 100L, lambda.min = 0.01)
-#' fit <- msgl(x, classes, lambda = lambda)
+#' fit <- msgl(x, classes, alpha = .5, lambda = lambda)
 #' fit$beta[[10]] #model with lambda = lambda[10] 
 #' @author Martin Vincent
 #' @export
@@ -52,6 +52,11 @@ msgl <- function(x, classes, sampleWeights = rep(1/length(classes), length(class
 	
 	classes <- factor(classes)
 	nclasses <- length(levels(classes))
+	
+	if(alpha == 1) {
+		#Lasso -> ignor grouping
+		grouping <- NULL
+	}
 	
 	if(!is.null(grouping)) {
 		
@@ -195,6 +200,11 @@ msgl.lambda.seq <- function(x, classes, sampleWeights = rep(1/length(classes), l
 	classes <- factor(classes)
 	nclasses <- length(levels(classes))
 	
+	if(alpha == 1) {
+		#Lasso -> ignor grouping
+		grouping <- NULL
+	}
+	
 	if(!is.null(grouping)) {
 		
 		grouping <- factor(grouping)
@@ -299,7 +309,7 @@ msgl.lambda.seq <- function(x, classes, sampleWeights = rep(1/length(classes), l
 #' data(SimData)
 #' x <- sim.data$x
 #' classes <- sim.data$classes
-#' lambda <- msgl.lambda.seq(x, classes, alpha = .5, d = 50L, lambda.min = 0.03)
+#' lambda <- msgl.lambda.seq(x, classes, alpha = .5, d = 25L, lambda.min = 0.03)
 #' fit.cv <- msgl.cv(x, classes, alpha = .5, lambda = lambda)
 #' 
 #' # Missclassification count
@@ -320,6 +330,11 @@ msgl.cv <- function(x, classes, sampleWeights = NULL, grouping = NULL, groupWeig
 			n_train <- sapply(cv.indices, function(x) length(classes)-length(x))
 			sampleWeights <- rep(1/mean(n_train), length(classes))
 		}
+	}
+	
+	if(alpha == 1) {
+		#Lasso -> ignor grouping
+		grouping <- NULL
 	}
 	
 	if(!is.null(grouping)) {
@@ -486,6 +501,11 @@ msgl.subsampling <- function(x, classes, sampleWeights = rep(1/length(classes), 
 	
 	classes <- factor(classes)
 	nclasses <- length(levels(classes))
+	
+	if(alpha == 1) {
+		#Lasso -> ignor grouping
+		grouping <- NULL
+	}
 	
 	if(!is.null(grouping)) {
 		

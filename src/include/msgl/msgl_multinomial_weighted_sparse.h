@@ -22,26 +22,26 @@
 
 extern "C" {
 
-R::SEXP r_msgl_wb_sp_basic(R::SEXP r_x, R::SEXP r_classes, R::SEXP r_sample_weights, R::SEXP r_block_dim, R::SEXP r_blockWeights,
-		R::SEXP r_parameterWeights, R::SEXP r_alpha, R::SEXP r_lambda, R::SEXP r_needed_solutions, R::SEXP r_config);
+SEXP r_msgl_wb_sp_basic(SEXP r_x, SEXP r_classes, SEXP r_sample_weights, SEXP r_block_dim, SEXP r_blockWeights,
+		SEXP r_parameterWeights, SEXP r_alpha, SEXP r_lambda, SEXP r_needed_solutions, SEXP r_config);
 
-R::SEXP r_msgl_wb_sp_lambda_seq(R::SEXP r_x, R::SEXP r_classes, R::SEXP r_sample_weights, R::SEXP r_block_dim, R::SEXP r_blockWeights,
-		R::SEXP r_parameterWeights, R::SEXP r_alpha, R::SEXP r_numberOfModels, R::SEXP r_lambdaMin, R::SEXP r_config);
+SEXP r_msgl_wb_sp_lambda_seq(SEXP r_x, SEXP r_classes, SEXP r_sample_weights, SEXP r_block_dim, SEXP r_blockWeights,
+		SEXP r_parameterWeights, SEXP r_alpha, SEXP r_numberOfModels, SEXP r_lambdaMin, SEXP r_config);
 
-R::SEXP r_msgl_wb_sp_cv(R::SEXP r_x, R::SEXP r_classes, R::SEXP r_sample_weights, R::SEXP r_block_dim, R::SEXP r_blockWeights,
-		R::SEXP r_parameterWeights, R::SEXP r_alpha, R::SEXP r_lambda_seq, R::SEXP r_fold, R::SEXP r_cv_indices, R::SEXP r_use_cv_indices,
-		R::SEXP r_number_of_threads, R::SEXP r_seed, R::SEXP r_config);
+SEXP r_msgl_wb_sp_cv(SEXP r_x, SEXP r_classes, SEXP r_sample_weights, SEXP r_block_dim, SEXP r_blockWeights,
+		SEXP r_parameterWeights, SEXP r_alpha, SEXP r_lambda_seq, SEXP r_fold, SEXP r_cv_indices, SEXP r_use_cv_indices,
+		SEXP r_number_of_threads, SEXP r_seed, SEXP r_config);
 
-R::SEXP r_msgl_wb_sp_subsampling(R::SEXP r_x, R::SEXP r_classes, R::SEXP r_sample_weights, R::SEXP r_block_dim, R::SEXP r_blockWeights,
-		R::SEXP r_parameterWeights, R::SEXP r_alpha, R::SEXP r_lambda_seq, R::SEXP r_training_samples, R::SEXP r_test_samples,
-		R::SEXP r_number_of_threads, R::SEXP r_config);
+SEXP r_msgl_wb_sp_subsampling(SEXP r_x, SEXP r_classes, SEXP r_sample_weights, SEXP r_block_dim, SEXP r_blockWeights,
+		SEXP r_parameterWeights, SEXP r_alpha, SEXP r_lambda_seq, SEXP r_training_samples, SEXP r_test_samples,
+		SEXP r_number_of_threads, SEXP r_config);
 
-R::SEXP r_msgl_sparse_predict(R::SEXP r_x, R::SEXP r_beta);
+SEXP r_msgl_sparse_predict(SEXP r_x, SEXP r_beta);
 
 }
 
-R::SEXP msgl_wb_sp_lambda_seq(R::SEXP r_x, R::SEXP r_classes, R::SEXP r_sample_weights, R::SEXP r_block_dim, R::SEXP r_blockWeights,
-		R::SEXP r_parameterWeights, R::SEXP r_alpha, R::SEXP r_numberOfModels, R::SEXP r_lambdaMin, R::SEXP r_config) {
+SEXP msgl_wb_sp_lambda_seq(SEXP r_x, SEXP r_classes, SEXP r_sample_weights, SEXP r_block_dim, SEXP r_blockWeights,
+		SEXP r_parameterWeights, SEXP r_alpha, SEXP r_numberOfModels, SEXP r_lambdaMin, SEXP r_config) {
 
 	TIMER_START;
 
@@ -70,8 +70,8 @@ R::SEXP msgl_wb_sp_lambda_seq(R::SEXP r_x, R::SEXP r_classes, R::SEXP r_sample_w
 	return (rObject(result));
 }
 
-R::SEXP r_msgl_wb_sp_lambda_seq(R::SEXP r_x, R::SEXP r_classes, R::SEXP r_sample_weights, R::SEXP r_block_dim, R::SEXP r_blockWeights,
-		R::SEXP r_parameterWeights, R::SEXP r_alpha, R::SEXP r_numberOfModels, R::SEXP r_lambdaMin, R::SEXP r_config) {
+SEXP r_msgl_wb_sp_lambda_seq(SEXP r_x, SEXP r_classes, SEXP r_sample_weights, SEXP r_block_dim, SEXP r_blockWeights,
+		SEXP r_parameterWeights, SEXP r_alpha, SEXP r_numberOfModels, SEXP r_lambdaMin, SEXP r_config) {
 
 	try {
 
@@ -94,15 +94,15 @@ R::SEXP r_msgl_wb_sp_lambda_seq(R::SEXP r_x, R::SEXP r_classes, R::SEXP r_sample
 		SGL_ERROR("Unknown error");
 	}
 
-	return R::R_NilValue; //Avoid compiler warnings
+	return R_NilValue; //Avoid compiler warnings
 }
 
 /* msgl_basic
  *
  */
 
-R::SEXP msgl_wb_sp_basic(R::SEXP r_x, R::SEXP r_classes, R::SEXP r_sample_weights, R::SEXP r_block_dim, R::SEXP r_blockWeights,
-		R::SEXP r_parameterWeights, R::SEXP r_alpha, R::SEXP r_lambda_seq, R::SEXP r_needed_solutions, R::SEXP r_config) {
+SEXP msgl_wb_sp_basic(SEXP r_x, SEXP r_classes, SEXP r_sample_weights, SEXP r_block_dim, SEXP r_blockWeights,
+		SEXP r_parameterWeights, SEXP r_alpha, SEXP r_lambda_seq, SEXP r_needed_solutions, SEXP r_config) {
 
 	//Start scope timer, note will only be activated if SGL_TIMING is defined
 	TIMER_START;
@@ -124,8 +124,8 @@ R::SEXP msgl_wb_sp_basic(R::SEXP r_x, R::SEXP r_classes, R::SEXP r_sample_weight
 	sgl::DimConfig dim_config = sgl::createDimConfig(block_dim, blockWeights, parameterWeights);
 
 	if (config.verbose) {
-		rout << "Msgl, sparse" << endl;
-		rout << "Number of blocks : " << dim_config.n_blocks << " - total dimension : " << dim_config.dim << " - L2 penalty for block 0 : "
+		Rcpp::Rcout << "Msgl, sparse" << endl;
+		Rcpp::Rcout << "Number of blocks : " << dim_config.n_blocks << " - total dimension : " << dim_config.dim << " - L2 penalty for block 0 : "
 				<< dim_config.L2_penalty_weight(0) << endl;
 	}
 
@@ -139,19 +139,14 @@ R::SEXP msgl_wb_sp_basic(R::SEXP r_x, R::SEXP r_classes, R::SEXP r_sample_weight
 	sgl::vector object_value(needed_solutions.n_elem);
 	sgl::vector function_value(needed_solutions.n_elem);
 
-	sgl_optimizer.optimize(x_field, needed_solutions, object_value, function_value, lambda_seq);
+	sgl::natural n_models = sgl_optimizer.optimize(x_field, needed_solutions, object_value, function_value, lambda_seq);
 
-	boost::shared_ptr < rList > res_ptr;
-
-	//Build result R list
-	res_ptr = boost::shared_ptr < rList > (new rList(4));
-	rList & res = *res_ptr.get();
-
-	//TODO better solution
-	sgl::sparse_matrix_field beta(x_field.n_elem);
-	for (sgl::natural i = 0; i < beta.n_elem; ++i) {
+	sgl::sparse_matrix_field beta(n_models);
+	for (sgl::natural i = 0; i < n_models; ++i) {
 		beta(i) = x_field(i).as_matrix();
 	}
+
+	rList res(4);
 
 	res.attach(rObject(beta), "beta");
 	res.attach(rObject(object_value), "loss");
@@ -161,8 +156,8 @@ R::SEXP msgl_wb_sp_basic(R::SEXP r_x, R::SEXP r_classes, R::SEXP r_sample_weight
 	return (res);
 }
 
-R::SEXP r_msgl_wb_sp_basic(R::SEXP r_x, R::SEXP r_classes, R::SEXP r_sample_weights, R::SEXP r_block_dim, R::SEXP r_blockWeights,
-		R::SEXP r_parameterWeights, R::SEXP r_alpha, R::SEXP r_lambda_seq, R::SEXP r_needed_solutions, R::SEXP r_config) {
+SEXP r_msgl_wb_sp_basic(SEXP r_x, SEXP r_classes, SEXP r_sample_weights, SEXP r_block_dim, SEXP r_blockWeights,
+		SEXP r_parameterWeights, SEXP r_alpha, SEXP r_lambda_seq, SEXP r_needed_solutions, SEXP r_config) {
 
 	try {
 
@@ -184,16 +179,16 @@ R::SEXP r_msgl_wb_sp_basic(R::SEXP r_x, R::SEXP r_classes, R::SEXP r_sample_weig
 		SGL_ERROR("Unknown error");
 	}
 
-	return R::R_NilValue; //Avoid compiler warnings
+	return R_NilValue; //Avoid compiler warnings
 }
 
 /* msgl_cv
  *
  */
 
-R::SEXP msgl_wb_sp_cv(R::SEXP r_x, R::SEXP r_classes, R::SEXP r_sample_weights, R::SEXP r_block_dim, R::SEXP r_blockWeights,
-		R::SEXP r_parameterWeights, R::SEXP r_alpha, R::SEXP r_lambda_seq, R::SEXP r_fold, R::SEXP r_cv_indices, R::SEXP r_use_cv_indices,
-		R::SEXP r_number_of_threads, R::SEXP r_seed, R::SEXP r_config) {
+SEXP msgl_wb_sp_cv(SEXP r_x, SEXP r_classes, SEXP r_sample_weights, SEXP r_block_dim, SEXP r_blockWeights,
+		SEXP r_parameterWeights, SEXP r_alpha, SEXP r_lambda_seq, SEXP r_fold, SEXP r_cv_indices, SEXP r_use_cv_indices,
+		SEXP r_number_of_threads, SEXP r_seed, SEXP r_config) {
 
 	//Map data
 	const sgl::sparse_matrix X = get_value < sgl::sparse_matrix > (r_x);
@@ -216,8 +211,8 @@ R::SEXP msgl_wb_sp_cv(R::SEXP r_x, R::SEXP r_classes, R::SEXP r_sample_weights, 
 	sgl::DimConfig dim_config = sgl::createDimConfig(block_dim, blockWeights, parameterWeights);
 
 	if (config.verbose) {
-		rout << "Msgl, cross validation, sparse" << endl;
-		rout << "Number of blocks : " << dim_config.n_blocks << " - total dimension : " << dim_config.dim << " - L2 penalty for block 0 : "
+		Rcpp::Rcout << "Msgl, cross validation, sparse" << endl;
+		Rcpp::Rcout << "Number of blocks : " << dim_config.n_blocks << " - total dimension : " << dim_config.dim << " - L2 penalty for block 0 : "
 				<< dim_config.L2_penalty_weight(0) << endl;
 	}
 
@@ -266,9 +261,9 @@ R::SEXP msgl_wb_sp_cv(R::SEXP r_x, R::SEXP r_classes, R::SEXP r_sample_weights, 
 	return res;
 }
 
-R::SEXP r_msgl_wb_sp_cv(R::SEXP r_x, R::SEXP r_classes, R::SEXP r_sample_weights, R::SEXP r_block_dim, R::SEXP r_blockWeights,
-		R::SEXP r_parameterWeights, R::SEXP r_alpha, R::SEXP r_lambda_seq, R::SEXP r_fold, R::SEXP r_cv_indices, R::SEXP r_use_cv_indices,
-		R::SEXP r_number_of_threads, R::SEXP r_seed, R::SEXP r_config) {
+SEXP r_msgl_wb_sp_cv(SEXP r_x, SEXP r_classes, SEXP r_sample_weights, SEXP r_block_dim, SEXP r_blockWeights,
+		SEXP r_parameterWeights, SEXP r_alpha, SEXP r_lambda_seq, SEXP r_fold, SEXP r_cv_indices, SEXP r_use_cv_indices,
+		SEXP r_number_of_threads, SEXP r_seed, SEXP r_config) {
 
 	try {
 
@@ -291,7 +286,7 @@ R::SEXP r_msgl_wb_sp_cv(R::SEXP r_x, R::SEXP r_classes, R::SEXP r_sample_weights
 		SGL_ERROR("Unknown error");
 	}
 
-	return R::R_NilValue; //Avoid compiler warnings
+	return R_NilValue; //Avoid compiler warnings
 }
 
 boost::tuple<field<field<msgl::MultinomialResponse> >, sgl::natural_matrix, sgl::natural_matrix> subsampling(sgl::sparse_matrix const& X,
@@ -304,8 +299,8 @@ boost::tuple<field<field<msgl::MultinomialResponse> >, sgl::natural_matrix, sgl:
 	msgl::sp_gl_weighted_multinomial obj_type(data);
 
 	if (config.verbose) {
-		rout << "Msgl, subsampling, sparse" << endl;
-		rout << "Number of blocks : " << dim_config.n_blocks << " - total dimension : " << dim_config.dim << " - L2 penalty for block 0 : "
+		Rcpp::Rcout << "Msgl, subsampling, sparse" << endl;
+		Rcpp::Rcout << "Number of blocks : " << dim_config.n_blocks << " - total dimension : " << dim_config.dim << " - L2 penalty for block 0 : "
 				<< dim_config.L2_penalty_weight(0) << endl;
 	}
 
@@ -317,9 +312,9 @@ boost::tuple<field<field<msgl::MultinomialResponse> >, sgl::natural_matrix, sgl:
 	return sgl_optimizer.subsampling(predictor, lambda_seq, training_samples, test_samples, number_of_threads);
 }
 
-R::SEXP msgl_wb_sp_subsampling(R::SEXP r_x, R::SEXP r_classes, R::SEXP r_sample_weights, R::SEXP r_block_dim, R::SEXP r_blockWeights,
-		R::SEXP r_parameterWeights, R::SEXP r_alpha, R::SEXP r_lambda_seq, R::SEXP r_training_samples, R::SEXP r_test_samples,
-		R::SEXP r_number_of_threads, R::SEXP r_config) {
+SEXP msgl_wb_sp_subsampling(SEXP r_x, SEXP r_classes, SEXP r_sample_weights, SEXP r_block_dim, SEXP r_blockWeights,
+		SEXP r_parameterWeights, SEXP r_alpha, SEXP r_lambda_seq, SEXP r_training_samples, SEXP r_test_samples,
+		SEXP r_number_of_threads, SEXP r_config) {
 
 	//Map data
 	const sgl::sparse_matrix X = get_value < sgl::sparse_matrix > (r_x);
@@ -367,9 +362,9 @@ R::SEXP msgl_wb_sp_subsampling(R::SEXP r_x, R::SEXP r_classes, R::SEXP r_sample_
 
 }
 
-R::SEXP r_msgl_wb_sp_subsampling(R::SEXP r_x, R::SEXP r_classes, R::SEXP r_sample_weights, R::SEXP r_block_dim, R::SEXP r_blockWeights,
-		R::SEXP r_parameterWeights, R::SEXP r_alpha, R::SEXP r_lambda_seq, R::SEXP r_training_samples, R::SEXP r_test_samples,
-		R::SEXP r_number_of_threads, R::SEXP r_config) {
+SEXP r_msgl_wb_sp_subsampling(SEXP r_x, SEXP r_classes, SEXP r_sample_weights, SEXP r_block_dim, SEXP r_blockWeights,
+		SEXP r_parameterWeights, SEXP r_alpha, SEXP r_lambda_seq, SEXP r_training_samples, SEXP r_test_samples,
+		SEXP r_number_of_threads, SEXP r_config) {
 
 	try {
 
@@ -392,14 +387,14 @@ R::SEXP r_msgl_wb_sp_subsampling(R::SEXP r_x, R::SEXP r_classes, R::SEXP r_sampl
 		SGL_ERROR("Unknown error");
 	}
 
-	return R::R_NilValue; //Avoid compiler warnings
+	return R_NilValue; //Avoid compiler warnings
 }
 
 /* msgl_predict_classes
  *
  */
 
-R::SEXP msgl_sparse_predict(R::SEXP r_x, R::SEXP r_beta) {
+SEXP msgl_sparse_predict(SEXP r_x, SEXP r_beta) {
 
 	//TODO domain checks
 
@@ -420,7 +415,7 @@ R::SEXP msgl_sparse_predict(R::SEXP r_x, R::SEXP r_beta) {
 	return res;
 }
 
-R::SEXP r_msgl_sparse_predict(R::SEXP r_x, R::SEXP r_beta) {
+SEXP r_msgl_sparse_predict(SEXP r_x, SEXP r_beta) {
 
 	try {
 
@@ -441,7 +436,7 @@ R::SEXP r_msgl_sparse_predict(R::SEXP r_x, R::SEXP r_beta) {
 		SGL_ERROR("Unknown error");
 	}
 
-	return R::R_NilValue; //Avoid compiler warnings
+	return R_NilValue; //Avoid compiler warnings
 }
 
 #endif /* MSGL_MULTINOMIAL_WEIGHTED_SPARSE_H_ */

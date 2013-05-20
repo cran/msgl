@@ -27,18 +27,10 @@
 #include <time.h>
 #include <stdexcept>
 
-#include "boost/math/special_functions.hpp"
-#include "boost/smart_ptr/shared_ptr.hpp"
-#include "boost/tuple/tuple.hpp"
+#include <boost/tuple/tuple.hpp>
 using boost::tuple;
 
-#include <boost/dynamic_bitset.hpp>
-
-#ifdef DEBUG_BACKTRACE
-#include "sgl/Backtrace.h"
-#endif
-
-#include "armadillo.hpp"
+#include <armadillo>
 #include "sgl/arma_additions.h"
 
 #include "sgl/simple_timer.h"
@@ -46,13 +38,6 @@ using boost::tuple;
 
 #include "Indices/Indices.h"
 #include "Indices/GroupedIndices.h"
-
-//Should ctrl-c throw an exception
-#ifdef SGL_WINDOWS
-//Currently not supported on windows
-#else
-#include <interrupt_handling.h>
-#endif
 
 namespace sgl {
 #include "sgl/numeric.h"
@@ -67,7 +52,7 @@ namespace sgl {
 #include "sgl/interface_basic.h"
 
 #ifdef SGL_EXTENSIONS
-#warning compling with sgl extensions
+//#warning compling with sgl extensions
 #endif
 
 }

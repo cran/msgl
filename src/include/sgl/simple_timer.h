@@ -1,8 +1,19 @@
 /*
- * simple_timer.h
- *
- *  Created on: Jul 19, 2011
- *      Author: martin
+ Sgl template library for optimizing sparse group lasso penalized objectives.
+ Copyright (C) 2012 Martin Vincent
+
+ This program is free software: you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation, either version 3 of the License, or
+ (at your option) any later version.
+
+ This program is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License for more details.
+
+ You should have received a copy of the GNU General Public License
+ along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
 
 #ifndef SIMPLE_TIMER_H_
@@ -27,7 +38,7 @@ public:
 	SimpleTimer(std::string func, std::string file, int line) : total(0), s(0), times(0), func(func), file(file), line(line) {}
 
 	~SimpleTimer() {
-		rout << func << " " << static_cast<double>(total) / CLOCKS_PER_SEC <<  " seconds - x"<< times << "." << " (in " << file << " at line "<< line << ") " << std::endl;
+		Rcpp::Rcout << func << " " << static_cast<double>(total) / CLOCKS_PER_SEC <<  " seconds - x"<< times << "." << " (in " << file << " at line "<< line << ") " << std::endl;
 	}
 
 	void start() {

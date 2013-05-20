@@ -19,30 +19,41 @@
 #ifndef MSGL_R_INTERFACE_H_
 #define MSGL_R_INTERFACE_H_
 
-#include <iostream>
-#include <cstdio>
+//Progress monitor
+#include <progress.hpp>
 
-//TODO fix openmp problem with rstream
-//TODO until fixed use write_msg in openmp loops
+#include <RcppCommon.h>
+#include <Rconfig.h>
+#include <RcppArmadilloConfig.h>
 
-class rstream : public std::streambuf {
-public:
-protected:
-  virtual std::streamsize xsputn(const char *s, std::streamsize n);
-  virtual int overflow(int c = EOF);
-  virtual int sync();
-};
+// Debugging
+#ifdef SGL_DEBUG
+// Do debugging
+#ifdef ARMA_NO_DEBUG
+#undef ARMA_NO_DEBUG
+#endif
+#ifdef NDEBUG
+#undef NDEBUG
+#endif
+//#define SGL_DEBUG_SIMPLE
+//#define SGL_DEBUG_COMPLEX
+//#define SGL_DEBUG_INFO_ALL
+//#define SGL_DEBUG_INFO_STEPSIZE
+#else
+// Do no debugging
+#define ARMA_NO_DEBUG
+#define NDEBUG
+#endif
 
-class rostream : public std::ostream
-{
-protected:
-    rstream buf;
+#include <armadillo>
+#include <Rcpp.h>
 
-public:
-    rostream() : std::ostream(&buf) {}
-};
+#include <boost/math/special_functions/fpclassify.hpp>
+#include <boost/smart_ptr/shared_ptr.hpp>
+#include <boost/tuple/tuple.hpp>
+using boost::tuple;
 
-rostream rout;
+#include "sgl/arma_additions.h"
 
 #include <sgl.h>
 #include <rtools.h>

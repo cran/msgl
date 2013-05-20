@@ -25,8 +25,8 @@ class rList {
 
 private:
 
-	R::SEXP listEXP;
-	R::SEXP names;
+	SEXP listEXP;
+	SEXP names;
 
 	unsigned int number_of_elements;
 	unsigned int index;
@@ -37,40 +37,40 @@ public:
 
 	rList(unsigned int number_of_elements) :
 		number_of_elements(number_of_elements), index(0), number_of_protects(2) {
-		R::PROTECT(listEXP = R::allocVector(VECSXP, number_of_elements));
-		R::PROTECT(names = R::allocVector(VECSXP, number_of_elements));
+		PROTECT(listEXP = Rf_allocVector(VECSXP, number_of_elements));
+		PROTECT(names = Rf_allocVector(VECSXP, number_of_elements));
 	}
 
-	rList(R::SEXP list) :
-		listEXP(list), names(getAttrib(listEXP, R::R_NamesSymbol)), number_of_elements(length(list)),
+	rList(SEXP list) :
+		listEXP(list), names(Rf_getAttrib(listEXP, R_NamesSymbol)), number_of_elements(Rf_length(list)),
 				index(number_of_elements), number_of_protects(0) {
 	}
 
 	~rList() {
 		if (number_of_protects > 0) {
-			R::UNPROTECT(number_of_protects);
+			UNPROTECT(number_of_protects);
 		}
 	}
 
-	void attach(R::SEXP element, string const& name) {
+	void attach(SEXP element, string const& name) {
 
 		if (index >= number_of_elements) {
 			throw runtime_error("Internal error - elements in r list exceed max number of elements.");
 		}
 
-		R::SET_VECTOR_ELT(listEXP, index, element);
-		R::SET_VECTOR_ELT(names, index, R::mkChar(name.c_str()));
+		SET_VECTOR_ELT(listEXP, index, element);
+		SET_VECTOR_ELT(names, index, Rf_mkChar(name.c_str()));
 		++index;
 	}
 
-	R::SEXP get(unsigned int index) const {
+	SEXP get(unsigned int index) const {
 		return VECTOR_ELT(listEXP, index);
 	}
 
 	int getIndex(string const& name) const {
 
 		for (u32 index = 0; index < number_of_elements; ++index) {
-			if (name.compare(R::CHAR(R::STRING_ELT(names, index))) == 0) {
+			if (name.compare(CHAR(STRING_ELT(names, index))) == 0) {
 				return index;
 			}
 		}
@@ -79,12 +79,12 @@ public:
 
 	}
 
-	operator R::SEXP() const {
+	operator SEXP() const {
 		return getSEXP();
 	}
 
-	R::SEXP getSEXP() const {
-		setAttrib(listEXP, R::R_NamesSymbol, names);
+	SEXP getSEXP() const {
+		Rf_setAttrib(listEXP, R_NamesSymbol, names);
 		return listEXP;
 	}
 };

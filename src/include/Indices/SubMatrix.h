@@ -20,7 +20,7 @@
 #ifndef SUBMATRIX_H
 #define	SUBMATRIX_H
 
-#include "../armadillo.hpp"
+#include <armadillo>
 using namespace arma;
 
 //TODO clean up

@@ -24,7 +24,7 @@ class rObject {
 
 private:
 
-	R::SEXP exp;
+	SEXP exp;
 
 	arma::u32 number_of_protects;
 
@@ -35,59 +35,59 @@ public:
 	rObject(arma::u32 value, bool unprotect_on_destruction = true) :
 			number_of_protects(1), unprotect_on_destruction(
 					unprotect_on_destruction) {
-		R::PROTECT(exp = R::allocVector(INTSXP, 1));
-		R::INTEGER(exp)[0] = value;
+		PROTECT(exp = Rf_allocVector(INTSXP, 1));
+		INTEGER(exp)[0] = value;
 	}
 
 	rObject(double value, bool unprotect_on_destruction = true) :
 			number_of_protects(1), unprotect_on_destruction(
 					unprotect_on_destruction) {
-		R::PROTECT(exp = R::allocVector(REALSXP, 1));
-		R::REAL(exp)[0] = value;
+		PROTECT(exp = Rf_allocVector(REALSXP, 1));
+		REAL(exp)[0] = value;
 	}
 
 	rObject(arma::Mat<double> const& m, bool unprotect_on_destruction = true) :
 			number_of_protects(2), unprotect_on_destruction(
 					unprotect_on_destruction) {
 
-		R::SEXP matrixDim;
-		R::PROTECT(matrixDim = R::allocVector(INTSXP, 2));
-		R::INTEGER(matrixDim)[0] = m.n_rows;
-		R::INTEGER(matrixDim)[1] = m.n_cols;
+		SEXP matrixDim;
+		PROTECT(matrixDim = Rf_allocVector(INTSXP, 2));
+		INTEGER(matrixDim)[0] = m.n_rows;
+		INTEGER(matrixDim)[1] = m.n_cols;
 
-		R::PROTECT(exp = R::allocVector(REALSXP, m.n_elem));
+		PROTECT(exp = Rf_allocVector(REALSXP, m.n_elem));
 
 		//Copy data
-		arrayops::copy(R::REAL(exp), m.mem, m.n_elem);
+		arrayops::copy(REAL(exp), m.mem, m.n_elem);
 
-		setAttrib(exp, R::R_DimSymbol, matrixDim);
+		Rf_setAttrib(exp, R_DimSymbol, matrixDim);
 	}
 
 	rObject(arma::Mat<arma::u32> const& m, bool unprotect_on_destruction = true) :
 			number_of_protects(2), unprotect_on_destruction(
 					unprotect_on_destruction) {
 
-		R::SEXP matrixDim;
-		R::PROTECT(matrixDim = R::allocVector(INTSXP, 2));
-		R::INTEGER(matrixDim)[0] = m.n_rows;
-		R::INTEGER(matrixDim)[1] = m.n_cols;
+		SEXP matrixDim;
+		PROTECT(matrixDim = Rf_allocVector(INTSXP, 2));
+		INTEGER(matrixDim)[0] = m.n_rows;
+		INTEGER(matrixDim)[1] = m.n_cols;
 
-		R::PROTECT(exp = R::allocVector(INTSXP, m.n_rows * m.n_cols));
+		PROTECT(exp = Rf_allocVector(INTSXP, m.n_rows * m.n_cols));
 
 		//Copy data
-		copy_cast(R::INTEGER(exp), m.mem, m.n_elem);
+		copy_cast(INTEGER(exp), m.mem, m.n_elem);
 
-		setAttrib(exp, R::R_DimSymbol, matrixDim);
+		Rf_setAttrib(exp, R_DimSymbol, matrixDim);
 	}
 
 	rObject(Col<double> const& v, bool unprotect_on_destruction = true) :
 			number_of_protects(1), unprotect_on_destruction(
 					unprotect_on_destruction) {
 
-		R::PROTECT(exp = R::allocVector(REALSXP, v.n_elem));
+		PROTECT(exp = Rf_allocVector(REALSXP, v.n_elem));
 
 		//Copy data
-		arrayops::copy(R::REAL(exp), v.mem, v.n_elem);
+		arrayops::copy(REAL(exp), v.mem, v.n_elem);
 
 	}
 
@@ -95,21 +95,21 @@ public:
 			number_of_protects(1), unprotect_on_destruction(
 					unprotect_on_destruction) {
 
-		R::PROTECT(exp = R::allocVector(INTSXP, v.n_elem));
+		PROTECT(exp = Rf_allocVector(INTSXP, v.n_elem));
 
 		//Copy data
-		copy_cast(R::INTEGER(exp), v.mem, v.n_elem);
+		copy_cast(INTEGER(exp), v.mem, v.n_elem);
 	}
 
 	rObject(Indices i, bool unprotect_on_destruction = true) :
 			number_of_protects(1), unprotect_on_destruction(
 					unprotect_on_destruction) {
 
-		R::PROTECT(exp = R::allocVector(INTSXP, i.size()));
+		PROTECT(exp = Rf_allocVector(INTSXP, i.size()));
 
 		//Copy data
 		arma::uvec tmp = i.getElements();
-		copy_cast(R::INTEGER(exp), tmp.mem, tmp.n_elem);
+		copy_cast(INTEGER(exp), tmp.mem, tmp.n_elem);
 
 	}
 
@@ -119,35 +119,35 @@ public:
 		exp = create_sparse_matrix_object(m, number_of_protects);
 	}
 
-	R::SEXP create_sparse_matrix_object(arma::sp_mat const& spMat,
+	SEXP create_sparse_matrix_object(arma::sp_mat const& spMat,
 			arma::u32 & number_of_protects) {
 
 		number_of_protects += 5;
 
-		R::SEXP sexp_object;
-		R::PROTECT(sexp_object = R::allocVector(VECSXP, 4)); // Creating a list with 4 elements
+		SEXP sexp_object;
+		PROTECT(sexp_object = Rf_allocVector(VECSXP, 4)); // Creating a list with 4 elements
 
 		//TODO names on list
 
-		R::SEXP dim;
-		R::PROTECT(dim = R::allocVector(INTSXP, 2));
-		R::SET_VECTOR_ELT(sexp_object, 0, dim);
-		R::INTEGER(dim)[0] = spMat.n_rows;
-		R::INTEGER(dim)[1] = spMat.n_cols;
+		SEXP dim;
+		PROTECT(dim = Rf_allocVector(INTSXP, 2));
+		SET_VECTOR_ELT(sexp_object, 0, dim);
+		INTEGER(dim)[0] = spMat.n_rows;
+		INTEGER(dim)[1] = spMat.n_cols;
 
-		R::SEXP col_ptrs;
-		R::PROTECT(col_ptrs = R::allocVector(INTSXP, spMat.n_cols+1));
-		R::SET_VECTOR_ELT(sexp_object, 1, col_ptrs);
+		SEXP col_ptrs;
+		PROTECT(col_ptrs = Rf_allocVector(INTSXP, spMat.n_cols+1));
+		SET_VECTOR_ELT(sexp_object, 1, col_ptrs);
 		copy_cast(INTEGER(col_ptrs), spMat.col_ptrs, spMat.n_cols+1);
 
-		R::SEXP row_indices;
-		R::PROTECT(row_indices = R::allocVector(INTSXP, spMat.n_nonzero));
-		R::SET_VECTOR_ELT(sexp_object, 2, row_indices);
+		SEXP row_indices;
+		PROTECT(row_indices = Rf_allocVector(INTSXP, spMat.n_nonzero));
+		SET_VECTOR_ELT(sexp_object, 2, row_indices);
 		copy_cast(INTEGER(row_indices), spMat.row_indices, spMat.n_nonzero);
 
-		R::SEXP values;
-		R::PROTECT(values = R::allocVector(REALSXP, spMat.n_nonzero));
-		R::SET_VECTOR_ELT(sexp_object, 3, values);
+		SEXP values;
+		PROTECT(values = Rf_allocVector(REALSXP, spMat.n_nonzero));
+		SET_VECTOR_ELT(sexp_object, 3, values);
         arrayops::copy(REAL(values), spMat.values, spMat.n_nonzero);
 
 		return sexp_object;
@@ -160,7 +160,7 @@ public:
 			number_of_protects(1), unprotect_on_destruction(
 					unprotect_on_destruction) {
 
-		R::PROTECT(exp = R::allocVector(VECSXP, field.n_elem)); // Creating a list with n_elem elements
+		PROTECT(exp = Rf_allocVector(VECSXP, field.n_elem)); // Creating a list with n_elem elements
 
 		//Construct list
 		unsigned int i;
@@ -168,22 +168,22 @@ public:
 			// attaching
 			rObject tmp(field(i), true);
 			//number_of_protects += tmp.n_protects();
-			R::SET_VECTOR_ELT(exp, i, tmp);
+			SET_VECTOR_ELT(exp, i, tmp);
 		}
 
 	}
 
 	~rObject() {
 		if (unprotect_on_destruction) {
-			R::UNPROTECT(number_of_protects);
+			UNPROTECT(number_of_protects);
 		}
 	}
 
-	operator R::SEXP() const {
+	operator SEXP() const {
 		return getSEXP();
 	}
 
-	R::SEXP getSEXP() const {
+	SEXP getSEXP() const {
 		return exp;
 	}
 

@@ -23,9 +23,10 @@
 #include <iostream>
 using namespace std;
 
-#include "boost/random.hpp"
+#include <boost/random/uniform_int.hpp>
+#include <boost/random/variate_generator.hpp>
 
-#include "../armadillo.hpp"
+#include <armadillo>
 using namespace arma;
 
 #include <exception>

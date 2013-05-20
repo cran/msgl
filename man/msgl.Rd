@@ -87,7 +87,7 @@ data(SimData)
 x <- sim.data$x
 classes <- sim.data$classes
 lambda <- msgl.lambda.seq(x, classes, alpha = .5, d = 100L, lambda.min = 0.01)
-fit <- msgl(x, classes, lambda = lambda)
+fit <- msgl(x, classes, alpha = .5, lambda = lambda)
 fit$beta[[10]] #model with lambda = lambda[10]
 }
 \author{

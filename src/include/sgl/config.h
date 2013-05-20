@@ -45,23 +45,21 @@ std::string convege_error_msg("Convergence problems - check: \n 1) lambda sequen
 #endif
 
 #ifndef SGL_STD_OUT
-#define SGL_STD_OUT rout
+#define SGL_STD_OUT Rcpp::Rcout
 #endif
 
-#ifndef SGL_INTERRUPT_INIT
-#define SGL_INTERRUPT_INIT
-#endif
+static bool sgl_interrupt = false;
 
 #ifndef SGL_INTERRUPT_CHECK
-#define SGL_INTERRUPT_CHECK
+#define SGL_INTERRUPT_CHECK if(sgl_interrupt) throw std::runtime_error("");
 #endif
 
 #ifndef SGL_INTERRUPT_RESET
-#define SGL_INTERRUPT_RESET
+#define SGL_INTERRUPT_RESET sgl_interrupt = false
 #endif
 
 #ifndef SGL_INTERRUPT
-#define SGL_INTERRUPT
+#define SGL_INTERRUPT sgl_interrupt = true;
 #endif
 
 //Debug
