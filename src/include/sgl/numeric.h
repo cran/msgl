@@ -60,6 +60,11 @@ typedef block_vector_field parameter_field;
 
 typedef vector parameter_block_vector;
 
+//Null vectors
+
+static const natural_vector null_natural_vector(static_cast<u32>(0));
+static const vector null_vector(static_cast<u32>(0));
+
 //Number of non zero elements
 
 natural n_non_zero(vector const& a) {

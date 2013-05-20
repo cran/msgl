@@ -1,4 +1,4 @@
-9647dde37e8daa706eaa0287d1a4ed59 *DESCRIPTION
+6c1bc8d103f2d9b0cd1ed9bbb96568ca *DESCRIPTION
 c979df8a1a6079a3df17df906333b174 *NAMESPACE
 a0709e290db60b6f44591a7719b46457 *R/msgl_multinomial.R
 b3847a38c55f87ae3c5a2d87e14c04e5 *data/SimData.RData
@@ -9,7 +9,7 @@ b3847a38c55f87ae3c5a2d87e14c04e5 *data/SimData.RData
 c0e72cbc4a210e1f942bc9b60becddfc *man/msgl.subsampling.Rd
 6bacf3782a7f90d99f4dce3605c276a9 *man/predict.msgl.Rd
 4592ec54d5ed1bf4e7e540b75f9151b9 *man/sgl.algorithm.config.Rd
-e119168892500c3c5d13d1c49a917994 *man/sgl.standard.config.Rd
+07038c939d11dc23505dcce3ccfd3e05 *man/sgl.standard.config.Rd
 231f4332928f430adfd15e7139ca5f72 *man/sim.data.Rd
 aae1a257f72370c8a25b46acec961f0a *src/Makevars
 edfab91b24fd81f8cdc44139b5b09e81 *src/include/Indices/GroupedIndices.h
@@ -20,7 +20,7 @@ edfab91b24fd81f8cdc44139b5b09e81 *src/include/Indices/GroupedIndices.h
 61ac4e820044353eece5ca7532b8b757 *src/include/msgl/msgl_algorithm_config.h
 19b6dea7492f3db5a519fcb050cac971 *src/include/msgl/msgl_matrix_data.h
 71acd672ccae51ddcec4885ac20dc908 *src/include/msgl/msgl_mg.h
-25b842e6b1e9d98d6d91bc572291a9b2 *src/include/msgl/msgl_mg_loss.h
+ff5bc36273e4d86b12a45f2ca637b6c2 *src/include/msgl/msgl_mg_loss.h
 e27285376b2324e91fdb332f0c24c05e *src/include/msgl/msgl_multinomial_predictor.h
 18e06e4b1c4257e1f3d9873e9ec07948 *src/include/msgl/msgl_multinomial_response.h
 a35f5bde8cfc5c151827be927d141183 *src/include/msgl/msgl_multinomial_weighted_sparse.h
@@ -40,7 +40,7 @@ d29f9770e080955a8e7a3f7df7f8ac14 *src/include/sgl/SglProblem.h
 848823c297f6d13ad106c0fb99f8375c *src/include/sgl/arma_additions.h
 705e2676f1271282026ad8771ba3fcc9 *src/include/sgl/config.h
 de1555826f17807afbc4f49af8259e59 *src/include/sgl/interface_basic.h
-747513f1435f04641f385b51a87761c7 *src/include/sgl/numeric.h
+029c826b472f8c1e5126d00cecc7958a *src/include/sgl/numeric.h
 a954b3570e7f2d4059268183e530fab9 *src/include/sgl/simple_timer.h
 e8893f854d0b8be6111612a85181d031 *src/include/sgl/tools.h
 bf8a99090be996c065e2035a9ad24cb1 *src/rmsgl.cpp
@@ -49,7 +49,7 @@ bf8a99090be996c065e2035a9ad24cb1 *src/rmsgl.cpp
 aaae9af7bc78ff84f0e287ed9506ca99 *tests/msgl_cv_test_3.R
 8d02546a0437aabc731e497988f4f593 *tests/msgl_cv_test_4.R
 8129756d7272597749d1848fd8858d44 *tests/msgl_grouping_test_1.R
-8933ae4bd039e499b9169565530d7add *tests/msgl_grouping_test_2.R
+422b31a53ea0637ceef5d75c3a8570b6 *tests/msgl_grouping_test_2.R
 2192d6603b2b034f51604e395090e9e5 *tests/msgl_grouping_test_3.R
 d2708d9ee9f77d960ce873a873263560 *tests/msgl_grouping_test_4.R
 b65205036e76a22007042cdc3178494b *tests/msgl_predict_test_1.R
