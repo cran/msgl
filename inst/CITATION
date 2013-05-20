@@ -1,0 +1,27 @@
+citHeader("To cite the 'msgl' package in publications use:")
+
+year <- sub(".*(2[[:digit:]]{3})-.*", "\\1", meta$Date, perl = TRUE)
+vers <- paste("R package version", meta$Version)
+
+citEntry(entry="Manual",
+         title = "msgl: Multinomial sparse group lasso",
+         author = personList(as.person("Martin Vincent")),
+         year = year,
+         note = vers,
+
+         textVersion =
+         paste("Martin Vincent (",
+               year,
+               "). msgl: Multinomial sparse group lasso. ",
+               vers, ".", sep=""))
+
+citEntry(entry="Article",
+         title = "Sparse group lasso and high dimensional multinomial classification",
+         author = personList(as.person("Vincent, M."),
+                             as.person("Hansen, N. R.")),
+         year     = "2012",
+         journal = "Computational Statistics & Data Analysis",
+	 textVersion =
+         paste("Vincent, M. and Hansen, N. R.",
+  	       "Sparse group lasso and high dimensional multinomial classification.", "Computational Statistics & Data Analysis")
+)
