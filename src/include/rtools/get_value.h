@@ -116,9 +116,11 @@ arma::sp_mat get_value(SEXP exp) {
 	new_row_indices[n_nonzero] = 0;
 
 	int * col_ptr = INTEGER(col_ptrs);
-	for (unsigned int i = 0; i < n_cols + 2; ++i) {
+	for (unsigned int i = 0; i < n_cols + 1; ++i) {
 		arma::access::rwp(m.col_ptrs)[i] = static_cast<arma::uword>(col_ptr[i]);
 	}
+
+	arma::access::rwp(m.col_ptrs)[n_cols+1] = std::numeric_limits<int>::max();
 
 	arma::memory::release(m.values);
 	arma::memory::release(m.row_indices);

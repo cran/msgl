@@ -1,4 +1,4 @@
-2cea3ea432712728671f9fdd3b2b135a *DESCRIPTION
+be6f6bf150554b95a08398cd10fa20fd *DESCRIPTION
 c979df8a1a6079a3df17df906333b174 *NAMESPACE
 a0709e290db60b6f44591a7719b46457 *R/msgl_multinomial.R
 b3847a38c55f87ae3c5a2d87e14c04e5 *data/SimData.RData
@@ -26,7 +26,7 @@ e27285376b2324e91fdb332f0c24c05e *src/include/msgl/msgl_multinomial_predictor.h
 a35f5bde8cfc5c151827be927d141183 *src/include/msgl/msgl_multinomial_weighted_sparse.h
 1c83ec2381845d049dcd2dc2bc0ea50d *src/include/msgl_R_interface.h
 500d81039d7ae64705773cd3a43064a2 *src/include/rtools.h
-ef9bbb971f5b59f8858998419aa8def9 *src/include/rtools/get_value.h
+d63400f3a1335a68eb01b6fd157fd0cf *src/include/rtools/get_value.h
 a0f9ad03d45c710d27fe5ac49e4cf20f *src/include/rtools/rList.h
 5810d43fe2e19838a8baa1a9980bdc67 *src/include/rtools/rObject.h
 c6cf85e061d4799370bcc1d124eea372 *src/include/sgl.h
