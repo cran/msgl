@@ -1,4 +1,4 @@
-6c1bc8d103f2d9b0cd1ed9bbb96568ca *DESCRIPTION
+2cea3ea432712728671f9fdd3b2b135a *DESCRIPTION
 c979df8a1a6079a3df17df906333b174 *NAMESPACE
 a0709e290db60b6f44591a7719b46457 *R/msgl_multinomial.R
 b3847a38c55f87ae3c5a2d87e14c04e5 *data/SimData.RData
@@ -48,13 +48,13 @@ bf8a99090be996c065e2035a9ad24cb1 *src/rmsgl.cpp
 7743d3745de46901688893dc8568bc27 *tests/msgl_cv_test_2.R
 aaae9af7bc78ff84f0e287ed9506ca99 *tests/msgl_cv_test_3.R
 8d02546a0437aabc731e497988f4f593 *tests/msgl_cv_test_4.R
-8129756d7272597749d1848fd8858d44 *tests/msgl_grouping_test_1.R
+5acd581f83958694c6e69efc46856065 *tests/msgl_grouping_test_1.R
 422b31a53ea0637ceef5d75c3a8570b6 *tests/msgl_grouping_test_2.R
 2192d6603b2b034f51604e395090e9e5 *tests/msgl_grouping_test_3.R
 d2708d9ee9f77d960ce873a873263560 *tests/msgl_grouping_test_4.R
 b65205036e76a22007042cdc3178494b *tests/msgl_predict_test_1.R
 d5b0aafe6d397b64697eec462d36cf13 *tests/msgl_sub_test_1.R
-cfef5fd958b19572f8f67f3b21e3d519 *tests/msgl_test_1.R
+1d2d9a4da0e6f1f5a0312f456916d161 *tests/msgl_test_1.R
 a67b8d1280ee42e4f5eebdf291e449f0 *tests/msgl_test_2.R
 1d4aa70149518bcc66884e575642d7a5 *tests/msgl_test_3.R
 8b7845f8b60b45733fb6cc7dde661b97 *tests/msgl_test_4.R
