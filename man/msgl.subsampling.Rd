@@ -7,8 +7,9 @@
     grouping = NULL, groupWeights = NULL,
     parameterWeights = NULL, alpha = 0.5,
     standardize = TRUE, lambda, training, test,
-    sparse.data = FALSE, max.threads = 2L,
-    algorithm.config = sgl.standard.config)
+    intercept = TRUE, sparse.data = is(x, "sparseMatrix"),
+    collapse = FALSE, max.threads = 2L,
+    algorithm.config = msgl.standard.config)
 }
 \arguments{
   \item{x}{design matrix, matrix of size \eqn{N \times p}.}
@@ -18,27 +19,26 @@
   \item{sampleWeights}{sample weights, a vector of length
   \eqn{N}.}
 
-  \item{grouping}{grouping of covariates, a vector of
-  length \eqn{p}. Each element of the vector specifying the
-  group of the covariate.}
+  \item{grouping}{grouping of features (covariates), a
+  vector of length \eqn{p}. Each element of the vector
+  specifying the group of the feature.}
 
   \item{groupWeights}{the group weights, a vector of length
-  \eqn{m+1} (the number of groups). The first element of
-  the vector is the intercept weight. If \code{groupWeights
-  = NULL} default weights will be used. Default weights are
-  0 for the intercept and \deqn{\sqrt{K\cdot\textrm{number
-  of covariates in the group}}} for all other weights.}
+  \eqn{m} (the number of groups). If \code{groupWeights =
+  NULL} default weights will be used. Default weights are 0
+  for the intercept and \deqn{\sqrt{K\cdot\textrm{number of
+  features in the group}}} for all other weights.}
 
   \item{parameterWeights}{a matrix of size \eqn{K \times
-  (p+1)}. The first column of the matrix is the intercept
-  weights. Default weights are is 0 for the intercept
+  p}. If \code{parameterWeights = NULL} default weights
+  will be used. Default weights are is 0 for the intercept
   weights and 1 for all other weights.}
 
   \item{alpha}{the \eqn{\alpha} value 0 for group lasso, 1
   for lasso, between 0 and 1 gives a sparse group lasso
   penalty.}
 
-  \item{standardize}{if TRUE the covariates are standardize
+  \item{standardize}{if TRUE the features are standardize
   before fitting the model. The model parameters are
   returned in the original scale.}
 
@@ -57,9 +57,16 @@
   corresponding subsample. The length of the list must
   equal the length of the \code{training} list.}
 
+  \item{intercept}{should the model include intercept
+  parameters}
+
   \item{sparse.data}{if TRUE \code{x} will be treated as
   sparse, if \code{x} is a sparse matrix it will be treated
   as sparse by default.}
+
+  \item{collapse}{if \code{TRUE} the results for each
+  subsample will be collapse into one result (this is
+  useful if the subsamples are not overlapping)}
 
   \item{max.threads}{the maximal number of threads to be
   used}
@@ -83,25 +90,30 @@
   matrix of size \eqn{N \times d} with
   \eqn{d=}\code{length(lambda)}.} \item{features}{number of
   features used in the models.} \item{parameters}{number of
-  parameters used in the models.}
+  parameters used in the models.} \item{classes.true}{ a
+  list of length \code{length(training)}, containing the
+  true classes used for estimation}
 }
 \description{
-  Support the use of multiple processors.
+  Multinomial sparse group lasso generic subsampling
+  procedure using multiple possessors
 }
 \examples{
 data(SimData)
 x <- sim.data$x
 classes <- sim.data$classes
-lambda <- msgl.lambda.seq(x, classes, alpha = .5, d = 100L, lambda.min = 0.03)
 
-test <- replicate(5, sample(1:length(classes))[1:20], simplify = FALSE)
+test <- list(1:20, 21:40)
 train <- lapply(test, function(s) (1:length(classes))[-s])
 
-fit.sub <- msgl.subsampling(x, classes, alpha = .5, lambda = lambda,
- training = train, test = test)
+lambda <- msgl.lambda.seq(x, classes, alpha = .5, d = 50, lambda.min = 0.05)
+fit.sub <- msgl.subsampling(x, classes, alpha = .5, lambda = lambda, training = train, test = test)
 
-# Missclassification count of second subsample
-colSums(fit.sub$classes[[2]] != classes[test[[2]]])
+# Mean misclassification error of the tests
+Err(fit.sub)
+
+# Negative log likelihood error
+Err(fit.sub, type="loglike")
 }
 \author{
   Martin Vincent

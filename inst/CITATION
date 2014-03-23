@@ -19,9 +19,13 @@ citEntry(entry="Article",
          title = "Sparse group lasso and high dimensional multinomial classification",
          author = personList(as.person("Vincent, M."),
                              as.person("Hansen, N. R.")),
-         year     = "2012",
+         year    = "2014",
          journal = "Computational Statistics & Data Analysis",
-	 textVersion =
-         paste("Vincent, M. and Hansen, N. R.",
-  	       "Sparse group lasso and high dimensional multinomial classification.", "Computational Statistics & Data Analysis")
+         volume = "71",
+         pages = "771--786",
+         doi = "http://dx.doi.org/10.1016/j.csda.2013.06.004",
+		 url = "http://www.sciencedirect.com/science/article/pii/S0167947313002168",
+		 textVersion = paste("Vincent, M. and Hansen, N. R.", 
+         "Sparse group lasso and high dimensional multinomial classification.", 
+         "Computational Statistics & Data Analysis 71 (2014): 771-786.")
 )

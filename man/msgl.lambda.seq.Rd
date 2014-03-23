@@ -6,7 +6,8 @@
     sampleWeights = rep(1/length(classes), length(classes)),
     grouping = NULL, groupWeights = NULL,
     parameterWeights = NULL, alpha = 0.5, d = 100L,
-    standardize = TRUE, lambda.min, sparse.data = FALSE,
+    standardize = TRUE, lambda.min, intercept = TRUE,
+    sparse.data = is(x, "sparseMatrix"),
     algorithm.config = sgl.standard.config)
 }
 \arguments{
@@ -17,16 +18,16 @@
   \item{sampleWeights}{sample weights, a vector of length
   \eqn{N}.}
 
-  \item{grouping}{grouping of covariates, a vector of
-  length \eqn{p}. Each element of the vector specifying the
-  group of the covariate.}
+  \item{grouping}{grouping of features, a vector of length
+  \eqn{p}. Each element of the vector specifying the group
+  of the covariate.}
 
   \item{groupWeights}{the group weights, a vector of length
   \eqn{m+1} (the number of groups). The first element of
   the vector is the intercept weight. If \code{groupWeights
   = NULL} default weights will be used. Default weights are
   0 for the intercept and \deqn{\sqrt{K\cdot\textrm{number
-  of covariates in the group}}} for all other weights.}
+  of features in the group}}} for all other weights.}
 
   \item{parameterWeights}{a matrix of size \eqn{K \times
   (p+1)}. The first column of the matrix is the intercept
@@ -39,12 +40,15 @@
 
   \item{d}{the length of lambda sequence}
 
-  \item{standardize}{if TRUE the covariates are standardize
+  \item{standardize}{if TRUE the features are standardize
   before fitting the model. The model parameters are
   returned in the original scale.}
 
   \item{lambda.min}{the smallest lambda value in the
   computed sequence.}
+
+  \item{intercept}{should the model include intercept
+  parameters}
 
   \item{sparse.data}{if TRUE \code{x} will be treated as
   sparse, if \code{x} is a sparse matrix it will be treated
@@ -54,8 +58,8 @@
   used.}
 }
 \value{
-  a vector of length \code{d} containing the compute lambda
-  sequence.
+  a vector of length \code{d} containing the computed
+  lambda sequence.
 }
 \description{
   Computes a decreasing lambda sequence of length \code{d}.
@@ -67,7 +71,8 @@
 data(SimData)
 x <- sim.data$x
 classes <- sim.data$classes
-lambda <- msgl.lambda.seq(x, classes, alpha = .5, d = 100L, lambda.min = 0.01)
+
+lambda <- msgl.lambda.seq(x, classes, alpha = .5, d = 100, lambda.min = 0.01)
 }
 \author{
   Martin Vincent

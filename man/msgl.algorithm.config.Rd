@@ -1,8 +1,8 @@
-\name{sgl.algorithm.config}
-\alias{sgl.algorithm.config}
+\name{msgl.algorithm.config}
+\alias{msgl.algorithm.config}
 \title{Create a new algorithm configuration}
 \usage{
-  sgl.algorithm.config(tolerance_penalized_main_equation_loop = 1e-10,
+  msgl.algorithm.config(tolerance_penalized_main_equation_loop = 1e-10,
     tolerance_penalized_inner_loop_alpha = 1e-04,
     tolerance_penalized_inner_loop_beta = 1,
     tolerance_penalized_middel_loop_alpha = 0.01,
@@ -13,7 +13,7 @@
     use_stepsize_optimization_in_penalizeed_loop = TRUE,
     stepsize_opt_penalized_initial_t = 1,
     stepsize_opt_penalized_a = 0.1,
-    stepsize_opt_penalized_b = 0.1, verbose = FALSE)
+    stepsize_opt_penalized_b = 0.1, verbose = TRUE)
 }
 \arguments{
   \item{tolerance_penalized_main_equation_loop}{tolerance
@@ -64,7 +64,18 @@
   recommended to change any of the default values.
 }
 \examples{
-config.verbose <- sgl.algorithm.config(verbose = TRUE)
+data(SimData)
+x <- sim.data$x
+classes <- sim.data$classes
+
+# Create configuration
+config <- msgl.algorithm.config(verbose = FALSE)
+
+lambda <- msgl.lambda.seq(x, classes, alpha = .5, d = 50,
+ lambda.min = 0.05, algorithm.config = config)
+
+fit <- msgl(x, classes, alpha = .5, lambda = lambda,
+ algorithm.config = config)
 }
 \author{
   Martin Vincent

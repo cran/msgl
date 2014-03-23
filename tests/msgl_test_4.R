@@ -16,4 +16,4 @@ fit1a <- msgl(x, classes, alpha = 1, lambda = lambda, standardize = FALSE)
 # (Forced) Sparse x
 fit1b <- msgl(x, classes, alpha = 1, lambda = lambda, sparse.data = TRUE, standardize = FALSE)
 
-if(max(abs(fit1a$beta[[25]]-fit1b$beta[[25]])) > 1e-10) stop()
+if(max(abs(fit1a$beta[[25]]-fit1b$beta[[25]])) > 1e-5) stop()
