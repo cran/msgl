@@ -21,4 +21,4 @@ fit1a <- msgl(x, classes, grouping = grouping, alpha = .5, lambda = lambda, stan
 # (Forced) Sparse x
 fit1b <- msgl(x, classes, grouping = grouping, alpha = .5, lambda = lambda, sparse.data = TRUE, standardize = FALSE)
 
-if( sum(predict(fit1b, x)$classes != predict(fit1a, x)$classes) > 10 ) stop()
+if( sum(predict(fit1b, x)$classes != predict(fit1a, x)$classes) > 40 ) stop()

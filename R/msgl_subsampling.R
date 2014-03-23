@@ -110,7 +110,7 @@ msgl.subsampling <- function(x, classes, sampleWeights = rep(1/length(classes), 
 							'Features: ' = data$n.covariate, 
 							'Classes: ' = length(levels(classes)), 
 							'Groups: ' = length(unique(covariateGrouping)), 
-							'Paramters: ' = length(parameterWeights),
+							'Parameters: ' = length(parameterWeights),
 							check.names = FALSE), 
 					row.names = FALSE, digits = 2, right = TRUE)
 			cat("\n")
@@ -127,7 +127,7 @@ msgl.subsampling <- function(x, classes, sampleWeights = rep(1/length(classes), 
 								'Features: ' = data$n.covariate, 
 								'Classes: ' = length(levels(classes)), 
 								'Groups: ' = length(unique(covariateGrouping)), 
-								'Paramters: ' = length(parameterWeights),
+								'Parameters: ' = length(parameterWeights),
 								check.names = FALSE), 
 						row.names = FALSE, digits = 2, right = TRUE)
 				cat("\n")

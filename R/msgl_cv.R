@@ -152,7 +152,7 @@ msgl.cv <- function(x, classes, sampleWeights = NULL, grouping = NULL, groupWeig
 							'Features: ' = data$n.covariate, 
 							'Classes: ' = length(levels(classes)), 
 							'Groups: ' = length(unique(covariateGrouping)), 
-							'Paramters: ' = length(parameterWeights),
+							'Parameters: ' = length(parameterWeights),
 							check.names = FALSE), 
 					row.names = FALSE, digits = 2, right = TRUE)
 			cat("\n")
@@ -168,7 +168,7 @@ msgl.cv <- function(x, classes, sampleWeights = NULL, grouping = NULL, groupWeig
 							'Features: ' = data$n.covariate, 
 							'Classes: ' = length(levels(classes)), 
 							'Groups: ' = length(unique(covariateGrouping)), 
-							'Paramters: ' = length(parameterWeights),
+							'Parameters: ' = length(parameterWeights),
 							check.names = FALSE), 
 					row.names = FALSE, digits = 2, right = TRUE)
 			cat("\n")

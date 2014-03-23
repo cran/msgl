@@ -13,6 +13,4 @@ train <- lapply(test, function(s) (1:length(classes))[-s])
 
 fit.sub <- msgl.subsampling(x, classes, alpha = .5, lambda = lambda, training = train, test = test, max.threads = 2L)
 if(!all(fit.sub$classes[[1]] == fit.sub$classes[[2]])) stop()
-if(!all(colSums(fit.sub$classes[[2]] != classes[test[[2]]])[1:5*5] == c(18, 17, 12, 12, 10))) stop()
-
-
+if(min(Err(fit.sub, type="count")) > 15) stop()
