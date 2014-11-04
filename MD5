@@ -1,4 +1,4 @@
-3092394316421ad1ba86427b6a9b411e *DESCRIPTION
+a18a44b74d285955e2af2264299e6e7d *DESCRIPTION
 2ab9c71a21ee042101cda4153521e903 *NAMESPACE
 1bb5377df4daea211ee141c4b5785796 *R/msgl_config.R
 9befbc64934d9923c9395a7832efaf7e *R/msgl_cv.R
@@ -27,7 +27,7 @@ d30962cd07904060689d6ac380211f68 *man/predict.msgl.Rd
 f2b998e7502a2fe00b04f03258e6293b *src/Makevars
 2d17f82ea0f059298a1f4e77654c359d *src/multinomial_loss.h
 610bc8288e1028fcc9cb85a2dd60cabf *src/multinomial_response.h
-3fb0cd1e72ab363689fc927e132c5fd4 *src/rmsgl.cpp
+9f0fbed16580c35633998726b214a5be *src/rmsgl.cpp
 11670ff3aa1d8e50e149876534f019ac *tests/msgl_cv_test_1.R
 646aadec3c396cdcd8eec5fa9a5c7780 *tests/msgl_cv_test_2.R
 c598680db2ad6e27313b2af3f0d9bfcc *tests/msgl_cv_test_3.R

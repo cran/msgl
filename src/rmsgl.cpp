@@ -115,11 +115,11 @@ void R_init_msgl(DllInfo *info)
 {
 	// Print warnings
 #ifndef SGL_OPENMP_SUPP
-    Rcout << "NOTE : openMP (multithreading) is not supported on this system" << std::endl;
+	Rf_warning("msgl does not support multithreading on this system");
 #endif
 
 #ifdef SGL_DEBUG
-	Rcout << "WARNING : debugging is turned on -- this may increase the runtime" << std::endl;
+	Rf_warning("Compiled with debugging on -- this may slow down the runtime of the sgl routines");
 #endif
 
 // Register the .Call routines.
