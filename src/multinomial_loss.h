@@ -117,7 +117,7 @@ public:
 template<typename T>
 void MultinomialLoss<T>::set_lp(sgl::matrix const& linp) {
 
-	prob = exp(linp);
+	prob = trunc_exp(linp);
 
 	for (sgl::natural i = 0; i < n_samples; ++i) {
 		prob.row(i) *= 1 / as_scalar(sum(prob.row(i), 1));

@@ -31,7 +31,7 @@
 #' @param data a matrix of 
 #' @param response a vector of classes
 #' @param classes a vector of classes
-#' @param type type of error rate \code{rate} or \code{count}
+#' @param type type of error rate
 #' @param ... ignored
 #' @return a vector of error rates
 #' 
@@ -46,7 +46,7 @@
 #' classes.2 <- sim.data$classes[51:100]
 #' 
 #' #### Fit models using x.1
-#' lambda <- msgl.lambda.seq(x.1, classes.1, alpha = .5, d = 50, lambda.min = 0.05)
+#' lambda <- msgl.lambda.seq(x.1, classes.1, alpha = .5, d = 25, lambda.min = 0.075)
 #' fit <- msgl(x.1, classes.1, alpha = .5, lambda = lambda)
 #' 
 #' #### Training errors:
@@ -88,9 +88,8 @@
 #' Err(fit.sub, type="loglike")
 #'  
 #' @method Err msgl
-#' @S3method Err msgl
-#' @import sglOptim
 #' @export
+#' @import sglOptim
 Err.msgl <- function(object, data = NULL, response = object$classes.true, classes = response, type = "rate", ... ) {
 	
 	if(type=="rate") {
@@ -134,7 +133,6 @@ Err.msgl <- function(object, data = NULL, response = object$classes.true, classe
 #'
 #' @author Martin Vincent
 #' @method features msgl
-#' @S3method features msgl
 #' @import sglOptim
 #' @export
 features.msgl <- function(object, ...) {
@@ -166,7 +164,6 @@ features.msgl <- function(object, ...) {
 #'
 #' @author Martin Vincent
 #' @method parameters msgl
-#' @S3method parameters msgl
 #' @import sglOptim
 #' @export
 parameters.msgl <- function(object, ...) {
@@ -192,7 +189,6 @@ parameters.msgl <- function(object, ...) {
 #'
 #' @author Martin Vincent
 #' @method nmod msgl
-#' @S3method nmod msgl
 #' @import sglOptim
 #' @export
 nmod.msgl <- function(object, ...) {
@@ -212,7 +208,6 @@ nmod.msgl <- function(object, ...) {
 #' 
 #' @author Martin Vincent
 #' @method models msgl
-#' @S3method models msgl
 #' @import sglOptim
 #' @export
 models.msgl <- function(object, index = 1:nmod(object), ...) {
@@ -238,8 +233,8 @@ models.msgl <- function(object, index = 1:nmod(object), ...) {
 #' coef(fit, index = c(1,10,20))
 #'
 #' @author Martin Vincent
+#' @importFrom stats coef
 #' @method coef msgl
-#' @S3method coef msgl
 #' @import sglOptim
 #' @export
 coef.msgl <- function(object, index = 1:nmod(object), ...) {
@@ -261,7 +256,7 @@ coef.msgl <- function(object, index = 1:nmod(object), ...) {
 #' classes <- sim.data$classes
 #' 
 #' ### Estimation
-#' lambda <- msgl.lambda.seq(x, classes, alpha = .5, d = 50, lambda.min = 0.05)
+#' lambda <- msgl.lambda.seq(x, classes, alpha = .5, d = 25, lambda.min = 0.075)
 #' fit <- msgl(x, classes, alpha = .5, lambda = lambda)
 #'
 #' # Print some information about the estimated models
@@ -284,7 +279,6 @@ coef.msgl <- function(object, index = 1:nmod(object), ...) {
 #' fit.sub
 #' 
 #' @method print msgl
-#' @S3method print msgl
 #' @author Martin Vincent
 #' @import sglOptim
 #' @export
