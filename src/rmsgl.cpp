@@ -20,7 +20,7 @@
 //#undef NDEBUG
 
 //Should the timers be activated (only needed for profiling the code)
-//#define SGL_TIMING
+//#define DO_TIMING
 
 //Configuration
 //Debugging
@@ -39,6 +39,9 @@
 
 //Exception handling
 #define SGL_CATCH_EXCEPTIONS
+
+// print information abt convergence
+//#define SGL_DEBUG_INFO_QUADRATIC
 
 //Sgl optimizer
 #include <sgl.h>
@@ -105,8 +108,8 @@ static const R_CallMethodDef sglCallMethods[] = {
 		SGL_LAMBDA(msgl_dense), SGL_LAMBDA(msgl_sparse),
 		SGL_FIT(msgl_dense), SGL_FIT(msgl_sparse),
 		SGL_PREDICT(msgl_dense), SGL_PREDICT(msgl_sparse),
-        SGL_SUBSAMPLING(msgl_dense), SGL_SUBSAMPLING(msgl_sparse),
-		NULL};
+    SGL_SUBSAMPLING(msgl_dense), SGL_SUBSAMPLING(msgl_sparse),
+		{NULL}};
 
 extern "C" {
 	void R_init_msgl(DllInfo *info);
