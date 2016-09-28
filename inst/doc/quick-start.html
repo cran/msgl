@@ -163,56 +163,54 @@ hr {
 </head>
 
 <body>
-<!--
-%\VignetteEngine{knitr::knitr}
-%\VignetteIndexEntry{Quick Start}
--->
+<h2>Quick Start</h2>
 
-<h1>Quick Start</h1>
-
-<h2>1. Load the msgl library in R</h2>
+<h3>1. Load the msgl library in R</h3>
 
 <pre><code class="R">library(msgl)
 </code></pre>
 
-<h2>2. Load your data</h2>
+<h3>2. Load your data</h3>
 
 <p>Load data containing N samples and p features (covariates):</p>
 
-<pre><code class="R">x &lt;- # load design matrix (of size N x p) 
+<pre><code class="R">x &lt;- # load design matrix (of size N x p)
 classes &lt;- # load class labels (a vector of size N)
 </code></pre>
 
-<h2>3. Compute lambda sequence</h2>
+<h3>3. Compute lambda sequence</h3>
 
-<p>Choose a lambda.min and an alpha. With alpha = 1 for lasso, alpha = 0 for group lasso and alpha in the range (0,1) for spares group lasso. </p>
+<p>Choose <code>lambda.min</code> and <code>alpha</code>. With <code>alpha = 1</code> for lasso, <code>alpha = 0</code> for group lasso and <code>alpha</code> in the range (0,1) for spares group lasso.</p>
 
 <pre><code class="R">lambda &lt;- msgl.lambda.seq(x, classes, alpha = 0.25, lambda.min = 1e-4)
 </code></pre>
 
-<p>The user specified lambda.min should be less than the compute lambda.max. Lambda max is the lambda at which the first penalized parameter becomes non-zero. A smaller lambda.min will take longer to fit and include more features.</p>
+<p>The user specified lambda min should be less than the compute lambda max. Lambda max is the lambda at which the first penalized parameter becomes non-zero. A smaller <code>lambda.min</code> will take longer to fit and include more features.</p>
 
 <pre><code class="R">lambda[1] # lambda.max
 </code></pre>
 
-<h2>4. Estimate error using cross validation</h2>
+<h3>4. Estimate error using cross validation</h3>
 
-<p>Use &#39;msgl.cv&#39; to estimate the error for each lambda value and for finding an optimal lambda. The following command will run a 10 fold cross validation for each lambda value in the lambda sequence using maximally 5 threads. </p>
+<p>Use <code>msgl.cv</code> to estimate the error for each lambda value and for finding an optimal lambda. The following command will run a 10 fold cross validation for each lambda value in the lambda sequence using 5 parallel units (using the <a href="https://CRAN.R-project.org/package=foreach">foreach</a> and <a href="https://CRAN.R-project.org/package=doParallel">doParallel</a> packages.</p>
 
-<pre><code class="R">fit.cv &lt;- msgl.cv(x, classes, fold = 10, alpha = 0.25, lambda = lambda, max.threads = 5)
+<pre><code class="R">cl &lt;- makeCluster(5)
+registerDoParallel(cl)
+
+fit.cv &lt;- msgl.cv(x, classes, fold = 10, alpha = 0.25, lambda = lambda, use_parallel = TRUE)
+
+stopCluster(cl)
 </code></pre>
 
-<p>the output (while the algorithm is running) would look something like this:</p>
+<p>the output (while the algorithm is running) look something like this:</p>
 
 <pre><code>Running msgl 10 fold cross validation (dense design matrix)
 
- Samples:  Features:  Classes:  Groups:  Parameters: 
+ Samples:  Features:  Classes:  Groups:  Parameters:
        119    22.284k        13  22.284k     289.692k
-
-0% 10   20   30   40   50   60   70   80   90   100%
-|----|----|----|----|----|----|----|----|----|----|
-********************************************
 </code></pre>
+
+<p>(for the current version <em>no progress bar will be shown</em>)</p>
 
 <p><strong>Get a summery of the validated models.</strong>
 We have now cross validated the models corresponding to the lambda values, one model for each lambda value. We may get a summery of this validation by doing:</p>
@@ -223,12 +221,12 @@ We have now cross validated the models corresponding to the lambda values, one m
 <p>this would give something like this:</p>
 
 <pre><code>Call:
-msgl.cv(x = x, classes = classes, alpha = 0.25, lambda = lambda, 
-    fold = 10, max.threads = 5)
+msgl.cv(x = x, classes = classes, alpha = 0.25, lambda = lambda,
+    fold = 10, use_parallel = TRUE)
 
 Models:
 
- Index:  Lambda:  Features:  Parameters:  Error: 
+ Index:  Lambda:  Features:  Parameters:  Error:
       20  0.03084       65.5       605.75    0.34
       40  0.00736        111       1.077k    0.23
       60  0.00176        133       1.301k    0.21
@@ -237,13 +235,13 @@ Models:
 
 Best model:
 
- Index:  Lambda:  Features:  Parameters:  Error: 
+ Index:  Lambda:  Features:  Parameters:  Error:
       44   0.0055      116.5       1.132k    0.21
 </code></pre>
 
 <p>Hence, the best model is obtained using lambda index 44 and it has a cross validation error of 0.21. The expected number of features is 116.5 and the expected number of parameters is 1.132k.</p>
 
-<h2>5. Fit the final model</h2>
+<h3>5. Fit the final model</h3>
 
 <p>Use msgl to fit a final model.</p>
 
@@ -252,7 +250,7 @@ Best model:
 
 <p><strong>Get a summery of the estimated models</strong></p>
 
-<pre><code class="R">fit 
+<pre><code class="R">fit
 </code></pre>
 
 <p>this would look like this:</p>
@@ -262,7 +260,7 @@ msgl(x = x, classes = classes, alpha = 0.25, lambda = lambda)
 
 Models:
 
- Index:  Lambda:  Features:  Parameters: 
+ Index:  Lambda:  Features:  Parameters:
       20  0.03084         63          583
       40  0.00736        122        1.18k
       60  0.00176        147       1.444k
@@ -281,13 +279,13 @@ As we saw in the previous step the model with index 44 had the best cross valida
 <pre><code>  [1] &quot;Intercept&quot;    &quot;200003_s_at&quot;   &quot;200061_s_at&quot;   &quot;200076_s_at&quot;  &quot;200089_s_at&quot;           
   [6] &quot;200650_s_at&quot;  &quot;200666_s_at&quot;   &quot;201105_at&quot;     &quot;201224_s_at&quot;  &quot;201275_at&quot;             
 
-                                ... 
+                                ...
 
 [126] &quot;37966_at&quot;     &quot;39854_r_at&quot;    &quot;AFFX-BioC-5_at&quot;   &quot;AFFX-r2-Ec-bioC-3_at&quot;   &quot;AFFX-r2-Ec-bioD-3_at&quot;  
 [131] &quot;AFFX-r2-Hs18SrRNA-5_at&quot;
 </code></pre>
 
-<p>Hence 131 features are included in the model, a bit more than expected based on the cross validation estimate. </p>
+<p>Hence 131 features are included in the model, a bit more than expected based on the cross validation estimate.</p>
 
 <p>We may also take a look at the estimate parameters (or coefficients)</p>
 
@@ -312,13 +310,13 @@ Normal volunteer                         5.9397066 -2.024757e-02  0.030672820 -0
 XR Emery Dreifuss muscular dystrophy     1.4807772 -1.975693e-02  .           -0.140377634 -0.049209029
 </code></pre>
 
-<p>If we count the total number of non-zero parameters in the model we get, in this case, 1.278k, which is slightly higher than the expected based on the cross validation estimate. </p>
+<p>If we count the total number of non-zero parameters in the model we get, in this case, 1.278k, which is slightly higher than the expected based on the cross validation estimate.</p>
 
-<h2>6. Use your model for predictions</h2>
+<h3>6. Use your model for predictions</h3>
 
 <p><strong>Load test data</strong> containing M samples and p features.</p>
 
-<pre><code class="R">x.test &lt;- # load matrix with test data (of size M x p) 
+<pre><code class="R">x.test &lt;- # load matrix with test data (of size M x p)
 </code></pre>
 
 <p>Use the final model to predict the classes of the M samples in x.test.</p>
