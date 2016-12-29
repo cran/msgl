@@ -25,127 +25,135 @@ class MultinomialLoss {
 
 public:
 
-	const sgl::natural n_samples;
-	const sgl::natural n_responses; //number of classes
+  const sgl::natural n_samples;
+  const sgl::natural n_responses; //number of classes
   const sgl::natural n_variables; // number of parameters in model -- determine size of lineaer preditors
 
 private:
 
-	sgl::natural_vector const& Y;
-	sgl::vector const& W; //weights - vector of length n_samples
+  sgl::natural_vector const& Y;
+  sgl::vector const& W; //weights - vector of length n_samples
 
-	sgl::matrix prob; //probabilities: n_samples x n_responses
+  sgl::matrix prob; //probabilities: n_samples x n_responses
 
 public:
 
-	typedef sgl::hessian_full<false> hessian_type; //general hessian - non constant
+  typedef sgl::hessian_full<false> hessian_type; //general hessian - non constant
 
-	typedef sgl::DataPackage_3< sgl::MatrixData<T>,
-			sgl::GroupData,
-			sgl::Data<sgl::vector, 'W'> > data_type;
+  typedef sgl::DataPackage_3<
+    sgl::MatrixData<T>,
+    sgl::GroupData<'Y'>,
+    sgl::Data<sgl::vector, 'W'> > data_type
+  ;
 
-	mutable sgl::matrix_field hessian_matrices;
+  mutable sgl::matrix_field hessian_matrices;
 
-	mutable bool hessians_computed;
+  mutable bool hessians_computed;
+
+  MultinomialLoss() :
+    n_samples(0),
+    n_responses(0),
+    n_variables(0),
+    Y(sgl::null_natural_vector),
+    W(sgl::null_vector),
+    prob(n_samples, n_responses),
+    hessian_matrices(),
+    hessians_computed(false)
+  {}
+
+  MultinomialLoss(data_type const& data) :
+    n_samples(data.get_A().n_samples),
+    n_responses(data.get_B().n_groups),
+    n_variables(n_responses),
+    Y(data.get_B().grouping),
+    W(data.get_C().data),
+    prob(n_samples, n_responses),
+    hessian_matrices(n_samples),
+    hessians_computed(false) {
+
+      set_lp_zero();
+  }
+
+  // size of linear predictors = n_samples x n_variables
+  void set_lp(sgl::matrix const& linp) {
+
+    TIMER_START
+
+    prob = trunc_exp(linp);
+
+    for (sgl::natural i = 0; i < n_samples; ++i) {
+      prob.row(i) *= 1 / as_scalar(sum(prob.row(i), 1));
+    }
+
+    ASSERT_IS_FINITE(prob);
+    hessians_computed = false;
+  }
+
+  void set_lp_zero() {
+
+    prob.fill(1 / static_cast<sgl::numeric>(n_responses));
+    hessians_computed = false;
+  }
 
 
-	MultinomialLoss() :
-            n_samples(0),
-						n_responses(0),
-						n_variables(0),
-						Y(sgl::null_natural_vector),
-						W(sgl::null_vector),
-						prob(n_samples, n_responses),
-						hessian_matrices(),
-						hessians_computed(false) {
-	}
+  const sgl::matrix gradients() const {
 
-	MultinomialLoss(data_type const& data) :
-			n_samples(data.get_A().n_samples),
-			n_responses(data.get_B().n_groups),
-			n_variables(n_responses),
-			Y(data.get_B().grouping),
-			W(data.get_C().data),
-			prob(n_samples, n_responses),
-			hessian_matrices(n_samples),
-			hessians_computed(false) {
+    TIMER_START
 
-		set_lp_zero();
-	}
+    sgl::matrix grad(trans(prob));
 
-	// size of linear predictors = n_samples x n_variables
-	void set_lp(sgl::matrix const& linp) {
+    for (sgl::natural i = 0; i < n_samples; ++i) {
+      grad(Y(i), i) -= 1;
+      grad.col(i) *= W(i);
+    }
 
-		prob = trunc_exp(linp);
+    return grad;
+  }
 
-		for (sgl::natural i = 0; i < n_samples; ++i) {
-			prob.row(i) *= 1 / as_scalar(sum(prob.row(i), 1));
-		}
+  void compute_hessians() const {
 
-		ASSERT_IS_FINITE(prob);
-		hessians_computed = false;
-	}
+    TIMER_START
 
-	void set_lp_zero() {
+    if (hessians_computed) {
+      return;
+    }
 
-		prob.fill(1 / static_cast<sgl::numeric>(n_responses));
-		hessians_computed = false;
-	}
+    for(sgl::natural i = 0; i < n_samples; ++i) {
+      hessian_matrices(i) = W(i) * (diagmat(prob.row(i)) - trans(prob.row(i)) * prob.row(i));
+    }
+
+    hessians_computed = true;
+  }
+
+  const sgl::matrix& hessians(sgl::natural i) const {
+    return  hessian_matrices(i);
+  }
+
+  const sgl::numeric sum_values() const {
+
+    TIMER_START
 
 
-	const sgl::matrix gradients() const {
+    sgl::numeric val = 0;
 
-		sgl::matrix grad(trans(prob));
+    for (sgl::natural i = 0; i < n_samples; ++i) {
+      val += -W(i) * log(prob(i, Y(i)));
+    }
 
-		for (sgl::natural i = 0; i < n_samples; ++i) {
-			grad(Y(i), i) -= 1;
-			grad.col(i) *= W(i);
-		}
-
-		return grad;
-	}
-
-	void compute_hessians() const {
-
-		if (hessians_computed) {
-			return;
-		}
-
-		for(sgl::natural i = 0; i < n_samples; ++i) {
-			hessian_matrices(i) = W(i) * (diagmat(prob.row(i)) - trans(prob.row(i)) * prob.row(i));
-		}
-
-		hessians_computed = true;
-	}
-
-    const sgl::matrix& hessians(sgl::natural i) const {
-		return  hessian_matrices(i);
-	}
-
-	const sgl::matrix& probabilities() const {
-		return prob;
-	}
-
-	const sgl::numeric sum_values() const {
-
-		sgl::numeric val = 0;
-
-		for (sgl::natural i = 0; i < n_samples; ++i) {
-			val += -W(i) * log(prob(i, Y(i)));
-		}
-
-		return (val);
-
+    return (val);
 	}
 
 };
 
-typedef sgl::ObjectiveFunctionType < sgl::GenralizedLinearLossDense < MultinomialLoss < sgl::matrix > > ,
-		MultinomialLoss < sgl::matrix >::data_type > multinomial;
+typedef sgl::ObjectiveFunctionType <
+  sgl::GenralizedLinearLossDense <
+    MultinomialLoss < sgl::matrix > > > multinomial
+;
 
 typedef sgl::ObjectiveFunctionType <
-		sgl::GenralizedLinearLossSparse < MultinomialLoss < sgl::sparse_matrix > > ,
-		MultinomialLoss < sgl::sparse_matrix >::data_type > multinomial_spx;
+  sgl::GenralizedLinearLossSparse <
+    MultinomialLoss < sgl::sparse_matrix > > > multinomial_spx
+;
 
 
 #endif /* MULTINOMIAL_LOSS_HPP_ */

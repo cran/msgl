@@ -1,6 +1,20 @@
 \name{NEWS}
 \title{News for Package 'msgl'}
 
+\section{Changes in msgl version 2.3.5 (2016-12-28)}{
+\itemize{
+  \item API changes:
+  \itemize{
+    \item msgl.lambda.seq deprecated use msgl::lambda
+    \item msgl deprecated use msgl::fit
+    \item msgl.cv deprecated use msgl::cv
+    \item msgl.subsampling deprecated use msgl::subsampling
+  }
+  \item fit, cv and subsampling supports relative lambda
+  \item Code cleanup, bug fixes and refactoring
+  \item Removed non-generic default sample weights from cv -- this may imply that the lambda sequence needs adjustment to reach the same results.
+}
+}
 \section{Changes in msgl version 2.3.0 (2016-09-28)}{
   \itemize{
   \item added quick-start vignette

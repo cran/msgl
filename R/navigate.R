@@ -38,16 +38,17 @@
 #' @author Martin Vincent
 #' @examples
 #' data(SimData)
-#' x.all <- sim.data$x
-#' x.1 <- sim.data$x[1:50,]
-#' x.2 <- sim.data$x[51:100,]
-#' classes.all <- sim.data$classes
-#' classes.1 <- sim.data$classes[1:50]
-#' classes.2 <- sim.data$classes[51:100]
+#'
+#' x.all <- x
+#' x.1 <- x[1:50,]
+#' x.2 <- x[51:100,]
+#' classes.all <- classes
+#' classes.1 <- classes[1:50]
+#' classes.2 <- classes[51:100]
 #'
 #' #### Fit models using x.1
-#' lambda <- msgl.lambda.seq(x.1, classes.1, alpha = .5, d = 25, lambda.min = 0.075)
-#' fit <- msgl(x.1, classes.1, alpha = .5, lambda = lambda)
+#' lambda <- msgl::lambda(x.1, classes.1, alpha = .5, d = 25, lambda.min = 0.075)
+#' fit <- msgl::fit(x.1, classes.1, alpha = .5, lambda = lambda)
 #'
 #' #### Training errors:
 #'
@@ -64,7 +65,7 @@
 #' Err(fit, x.2, classes.2)
 #'
 #' #### Do cross validation
-#' fit.cv <- msgl.cv(x.all, classes.all, alpha = .5, lambda = lambda)
+#' fit.cv <- msgl::cv(x.all, classes.all, alpha = .5, lambda = lambda)
 #'
 #' #### Cross validation errors (estimated expected generalization error)
 #'
@@ -78,7 +79,7 @@
 #' test <- list(1:20, 21:40)
 #' train <- lapply(test, function(s) (1:length(classes.all))[-s])
 #'
-#' fit.sub <- msgl.subsampling(x.all, classes.all, alpha = .5,
+#' fit.sub <- msgl::subsampling(x.all, classes.all, alpha = .5,
 #'  lambda = lambda, training = train, test = test)
 #'
 #' # Mean misclassification error of the tests
@@ -87,28 +88,37 @@
 #' # Negative log likelihood error
 #' Err(fit.sub, type="loglike")
 #'
-#' @method Err msgl
+#' @importFrom stats predict
+#' @importFrom sglOptim Err
+#' @importFrom sglOptim compute_error
 #' @export
-#' @import sglOptim
 Err.msgl <- function(object, data = NULL, response = object$classes.true, classes = response, type = "rate", ... ) {
 
-	if(is.null(classes)) stop("classes must be specified")
+	if(is.null(classes)) stop("classes or response must be specified")
 
-	if(type=="rate") {
-		return(compute_error(object, data = data, response.name = "classes", response = classes, loss = function(x,y) mean(x != y)))
+	loss <- switch(type,
+
+		rate = list(function(x,y) mean(sapply(1:length(x), function(i) x[[i]] != y[[i]])), "classes", FALSE),
+		count = list(function(x,y) sum(sapply(1:length(x), function(i) x[[i]] != y[[i]])), "classes", FALSE),
+
+		loglike = list(function(x,y) -mean(log(sapply(1:length(x), function(i) y[[i]][x[[i]]]))), "response", TRUE),
+
+		stop("Unknown type")
+	)
+
+	true_response <- classes
+
+	if( ! is.null(data) ) {
+		object <- predict(object, data)
 	}
 
-	if(type=="count") {
-		return(compute_error(object, data = data, response.name = "classes", response = classes, loss = function(x,y) sum(x != y)))
-	}
-
-	if(type=="loglike") {
-		loss <- function(x,y) -mean(log(sapply(1:length(y), function(i) x[as.integer(y[i]),i])))
-		return(compute_error(object, data = data, response.name = "response", response = classes, loss = loss))
-	}
-
-	stop("Unknown type")
-
+	return( compute_error(
+		x = object,
+		response_name = loss[[2]],
+		true_response = true_response,
+		loss = loss[[1]],
+		transposed_response = loss[[3]])
+	)
 }
 
 #' @title Nonzero features
@@ -122,10 +132,10 @@ Err.msgl <- function(object, data = NULL, response = object$classes.true, classe
 #'
 #' @examples
 #' data(SimData)
-#' x <- sim.data$x
-#' classes <- sim.data$classes
-#' lambda <- msgl.lambda.seq(x, classes, alpha = .5, d = 50, lambda.min = 0.05)
-#' fit <- msgl(x, classes, alpha = .5, lambda = lambda)
+#'
+#'
+#' lambda <- msgl::lambda(x, classes, alpha = .5, d = 50, lambda.min = 0.05)
+#' fit <- msgl::fit(x, classes, alpha = .5, lambda = lambda)
 #'
 #' # the nonzero features of model 1, 10 and 25
 #' features(fit)[c(1,10,25)]
@@ -134,8 +144,7 @@ Err.msgl <- function(object, data = NULL, response = object$classes.true, classe
 #' sapply(features(fit), length)
 #'
 #' @author Martin Vincent
-#' @method features msgl
-#' @import sglOptim
+#' @importFrom sglOptim features
 #' @export
 features.msgl <- function(object, ...) {
 	class(object) <- "sgl" # Use std function
@@ -153,10 +162,10 @@ features.msgl <- function(object, ...) {
 #'
 #' @examples
 #' data(SimData)
-#' x <- sim.data$x
-#' classes <- sim.data$classes
-#' lambda <- msgl.lambda.seq(x, classes, alpha = .5, d = 50, lambda.min = 0.05)
-#' fit <- msgl(x, classes, alpha = .5, lambda = lambda)
+#'
+#'
+#' lambda <- msgl::lambda(x, classes, alpha = .5, d = 50, lambda.min = 0.05)
+#' fit <- msgl::fit(x, classes, alpha = .5, lambda = lambda)
 #'
 #' # the nonzero parameters of model 1, 10 and 25
 #' parameters(fit)[c(1,10,25)]
@@ -165,8 +174,7 @@ features.msgl <- function(object, ...) {
 #' sapply(parameters(fit), sum)
 #'
 #' @author Martin Vincent
-#' @method parameters msgl
-#' @import sglOptim
+#' @importFrom sglOptim parameters
 #' @export
 parameters.msgl <- function(object, ...) {
 	class(object) <- "sgl" # Use std function
@@ -184,6 +192,7 @@ parameters.msgl <- function(object, ...) {
 #' @return a vector of length \code{nmod(x)} or a matrix containing the number of nonzero features (or group) of the models.
 #'
 #' @author Martin Vincent
+#' @importFrom sglOptim features_stat
 #' @export
 features_stat.msgl <- function(object, ...) {
 	class(object) <- "sgl" # Use std function
@@ -201,6 +210,7 @@ features_stat.msgl <- function(object, ...) {
 #' @return a vector of length \code{nmod(x)} or a matrix containing the number of nonzero parameters of the models.
 #'
 #' @author Martin Vincent
+#' @importFrom sglOptim parameters_stat
 #' @export
 parameters_stat.msgl <- function(object, ...) {
 	class(object) <- "sgl" # Use std function
@@ -208,7 +218,7 @@ parameters_stat.msgl <- function(object, ...) {
 }
 
 
-#' @title Returns the number of models in a msgl object
+#' @title Number of models used for fitting
 #' @description
 #' Returns the number of models used for fitting.
 #' Note that cv and subsampling objects does not containing any models even though nmod returns a positive number.
@@ -219,17 +229,16 @@ parameters_stat.msgl <- function(object, ...) {
 #'
 #' @examples
 #' data(SimData)
-#' x <- sim.data$x
-#' classes <- sim.data$classes
-#' lambda <- msgl.lambda.seq(x, classes, alpha = .5, d = 50, lambda.min = 0.05)
-#' fit <- msgl(x, classes, alpha = .5, lambda = lambda)
+#'
+#'
+#' lambda <- msgl::lambda(x, classes, alpha = .5, d = 50, lambda.min = 0.05)
+#' fit <- msgl::fit(x, classes, alpha = .5, lambda = lambda)
 #'
 #' # the number of models
 #' nmod(fit)
 #'
 #' @author Martin Vincent
-#' @method nmod msgl
-#' @import sglOptim
+#' @importFrom sglOptim nmod
 #' @export
 nmod.msgl <- function(object, ...) {
 	class(object) <- "sgl" # Use std function
@@ -245,6 +254,7 @@ nmod.msgl <- function(object, ...) {
 #' @return index of the best model.
 #'
 #' @author Martin Vincent
+#' @importFrom sglOptim best_model
 #' @export
 best_model.msgl <- function(object, ...) {
 	class(object) <- "sgl" # Use std function
@@ -263,15 +273,14 @@ best_model.msgl <- function(object, ...) {
 #' @return a list of \eqn{\beta} matrices.
 #'
 #' @author Martin Vincent
-#' @method models msgl
-#' @import sglOptim
+#' @importFrom sglOptim models
 #' @export
 models.msgl <- function(object, index = 1:nmod(object), ...) {
 	class(object) <- "sgl" # Use std function
 	return(models(object, ...))
 }
 
-#' @title Extract nonzero coefficients
+#' @title Nonzero coefficients
 #' @description
 #' This function returns the nonzero coefficients (that is the nonzero entries of the \eqn{beta} matrices)
 #'
@@ -282,18 +291,16 @@ models.msgl <- function(object, index = 1:nmod(object), ...) {
 #'
 #' @examples
 #' data(SimData)
-#' x <- sim.data$x
-#' classes <- sim.data$classes
-#' lambda <- msgl.lambda.seq(x, classes, alpha = .5, d = 50, lambda.min = 0.05)
-#' fit <- msgl(x, classes, alpha = .5, lambda = lambda)
+#'
+#'
+#' lambda <- msgl::lambda(x, classes, alpha = .5, d = 50, lambda.min = 0.05)
+#' fit <- msgl::fit(x, classes, alpha = .5, lambda = lambda)
 #'
 #' # the nonzero coefficients of the models 1, 10 and 20
 #' coef(fit, index = c(1,10,20))
 #'
 #' @author Martin Vincent
 #' @importFrom stats coef
-#' @method coef msgl
-#' @import sglOptim
 #' @export
 coef.msgl <- function(object, index = 1:nmod(object), ...) {
 	class(object) <- "sgl" # Use std function
@@ -310,18 +317,16 @@ coef.msgl <- function(object, index = 1:nmod(object), ...) {
 #'
 #' @examples
 #' data(SimData)
-#' x <- sim.data$x
-#' classes <- sim.data$classes
 #'
 #' ### Estimation
-#' lambda <- msgl.lambda.seq(x, classes, alpha = .5, d = 25, lambda.min = 0.075)
-#' fit <- msgl(x, classes, alpha = .5, lambda = lambda)
+#' lambda <- msgl::lambda(x, classes, alpha = .5, d = 25, lambda.min = 0.075)
+#' fit <- msgl::fit(x, classes, alpha = .5, lambda = lambda)
 #'
 #' # Print some information about the estimated models
 #' fit
 #'
 #' ### Cross validation
-#' fit.cv <- msgl.cv(x, classes, alpha = .5, lambda = lambda)
+#' fit.cv <- msgl::cv(x, classes, alpha = .5, lambda = lambda)
 #'
 #' # Print some information
 #' fit.cv
@@ -330,15 +335,15 @@ coef.msgl <- function(object, index = 1:nmod(object), ...) {
 #' test <- list(1:20, 21:40)
 #' train <- lapply(test, function(s) (1:length(classes))[-s])
 #'
-#' lambda <- msgl.lambda.seq(x, classes, alpha = .5, d = 50, lambda.min = 0.05)
-#' fit.sub <- msgl.subsampling(x, classes, alpha = .5, lambda = lambda, training = train, test = test)
+#' lambda <- msgl::lambda(x, classes, alpha = .5, d = 50, lambda.min = 0.05)
+#' fit.sub <- msgl::subsampling(x, classes, alpha = .5, lambda = lambda, training = train, test = test)
 #'
 #' # Print some information
 #' fit.sub
 #'
-#' @method print msgl
 #' @author Martin Vincent
-#' @import sglOptim
+#' @importFrom sglOptim sgl_print
+#' @method print msgl
 #' @export
 print.msgl <- function(x, ...) {
 	sgl_print(x)

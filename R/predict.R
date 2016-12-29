@@ -14,14 +14,14 @@
 #' @examples
 #' data(SimData)
 #'
-#' x.1 <- sim.data$x[1:50,]
-#' x.2 <- sim.data$x[51:100,]
+#' x.1 <- x[1:50,]
+#' x.2 <- x[51:100,]
 #'
-#' classes.1 <- sim.data$classes[1:50]
-#' classes.2 <- sim.data$classes[51:100]
+#' classes.1 <- classes[1:50]
+#' classes.2 <- classes[51:100]
 #'
-#' lambda <- msgl.lambda.seq(x.1, classes.1, alpha = .5, d = 50, lambda.min = 0.05)
-#' fit <- msgl(x.1, classes.1, alpha = .5, lambda = lambda)
+#' lambda <- msgl::lambda(x.1, classes.1, alpha = .5, d = 50, lambda.min = 0.05)
+#' fit <- msgl::fit(x.1, classes.1, alpha = .5, lambda = lambda)
 #'
 #' # Predict classes of new data set x.2
 #' res <- predict(fit, x.2)
@@ -36,9 +36,10 @@
 #' @importFrom utils packageVersion
 #' @importFrom methods is
 #' @importFrom methods as
-#' @method predict msgl
+#' @importFrom sglOptim sgl_predict
+#' @importFrom sglOptim create.sgldata
+#' @importFrom sglOptim transpose_response_elements
 #' @export
-#' @useDynLib msgl, .registration=TRUE
 predict.msgl <- function(object, x, sparse.data = is(x, "sparseMatrix"), ...) {
 
 	# Get call
@@ -46,44 +47,38 @@ predict.msgl <- function(object, x, sparse.data = is(x, "sparseMatrix"), ...) {
 
 	if(is.null(object$beta)) stop("No models found -- missing beta")
 
-	# add intercept
-	x <- cBind(Intercept = rep(1, nrow(x)), x)
+	if(object$intercept) {
+		# add intercept
+		x <- cBind(Intercept = rep(1, nrow(x)), x)
+	}
 
 	#Check dimension of x
 	if(dim(object$beta[[2]])[2] != ncol(x)) stop("x has wrong dimension")
 
-	data <- list()
-	data$sample.names <- rownames(x)
-	data$n.samples <- nrow(x)
-	data$sparseX <- sparse.data
+  data <- create.sgldata(
+    x = x,
+    y = NULL,
+    response_dimension = length(levels(object$classes.true)),
+    response_names = levels(object$classes.true),
+    sparseX = sparse.data, sparseY = FALSE
+  )
 
-	if(sparse.data) {
-
-		data$X <- as(x, "CsparseMatrix")
-
-		res <- sgl_predict("msgl_sparse", "msgl", object, data)
-
-	} else {
-
-		data$X <- as.matrix(x)
-
-		res <- sgl_predict("msgl_dense", "msgl", object, data)
-
-	}
+	res <- sgl_predict(
+		module_name = if(sparse.data) "msgl_sparse" else "msgl_dense",
+		PACKAGE = "msgl",
+		object = object,
+		data = data,
+		responses = c("link", "response", "classes")
+	)
 
 	### Responses
-	res$classes <- t(res$responses$classes)
-	res$response <- res$responses$response
-	res$link <- res$responses$link
-	res$responses <- NULL
+	res$classes <- apply(res$responses$classes, 2, function(x) levels(object$classes.true)[x])
+	dimnames(res$classes) <- dimnames(res$responses$classes)
+	attr(res$classes, "type") <- attr(res$responses$classes, "type")
 
-	class.names <- rownames(object$beta[[1]])
-	if(!is.null(class.names)) {
-		# Set class names
-		res$classes <- apply(X = res$classes, MARGIN = c(1,2), FUN = function(x) class.names[x])
-		res$link <- lapply(X = res$link, FUN = function(x) {rownames(x) <- class.names; x})
-		res$response <- lapply(X = res$response, FUN = function(x) {rownames(x) <- class.names; x})
-	}
+	res$response <- transpose_response_elements(res$responses$response)
+	res$link <- transpose_response_elements(res$responses$link)
+	res$responses <- NULL
 
 	# Various
 	res$msgl_version <- packageVersion("msgl")

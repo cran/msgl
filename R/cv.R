@@ -19,10 +19,10 @@
 #     along with this program.  If not, see <http://www.gnu.org/licenses/>
 #
 
-#' @title Multinomial sparse group lasso cross validation
+#' @title Cross Validation
 #'
 #' @description
-#' Multinomial sparse group lasso cross validation using multiple possessors.
+#' Multinomial sparse group lasso cross validation, with or without parallel backend.
 #'
 #' @param x design matrix, matrix of size \eqn{N \times p}.
 #' @param classes classes, factor of length \eqn{N}.
@@ -38,7 +38,8 @@
 #' Default weights are is 0 for the intercept weights and 1 for all other weights.#'
 #' @param alpha the \eqn{\alpha} value 0 for group lasso, 1 for lasso, between 0 and 1 gives a sparse group lasso penalty.
 #' @param standardize if TRUE the features are standardize before fitting the model. The model parameters are returned in the original scale.
-#' @param lambda the lambda sequence for the regularization path.
+#' @param lambda lambda.min relative to lambda.max or the lambda sequence for the regularization path.
+#' @param d length of lambda sequence (ignored if \code{length(lambda) > 1})
 #' @param fold the fold of the cross validation, an integer larger than \eqn{1} and less than \eqn{N+1}. Ignored if \code{cv.indices != NULL}.
 #' If \code{fold}\eqn{\le}\code{max(table(classes))} then the data will be split into \code{fold} disjoint subsets keeping the ration of classes approximately equal.
 #' Otherwise the data will be split into \code{fold} disjoint subsets without keeping the ration fixed.
@@ -62,14 +63,26 @@
 #'
 #' @examples
 #' data(SimData)
-#' x <- sim.data$x
-#' classes <- sim.data$classes
 #'
-#' lambda <- msgl.lambda.seq(x, classes, alpha = .5, d = 50, lambda.min = 0.05)
-#' fit.cv <- msgl.cv(x, classes, alpha = .5, lambda = lambda)
+#' # A quick look at the data
+#' dim(x)
+#' table(classes)
+#'
+#' # Setup clusters
+#' cl <- makeCluster(2)
+#' registerDoParallel(cl)
+#'
+#' # Run cross validation using 2 clusters
+#' # Using a lambda sequence ranging from the maximal lambda to 0.7 * maximal lambda
+#' fit.cv <- msgl::cv(x, classes, alpha = 0.5, lambda = 0.7, use_parallel = TRUE)
+#'
+#' # Stop clusters
+#' stopCluster(cl)
+#'
+#' # Print some information
+#' fit.cv
 #'
 #' # Cross validation errors (estimated expected generalization error)
-#'
 #' # Misclassification rate
 #' Err(fit.cv)
 #'
@@ -79,10 +92,10 @@
 #' @author Martin Vincent
 #' @importFrom utils packageVersion
 #' @importFrom methods is
+#' @importFrom sglOptim sgl_cv
+#' @importFrom sglOptim transpose_response_elements
 #' @export
-#' @useDynLib msgl, .registration=TRUE
-
-msgl.cv <- function(x, classes,
+cv <- function(x, classes,
 	sampleWeights = NULL,
 	grouping = NULL,
 	groupWeights = NULL,
@@ -90,6 +103,7 @@ msgl.cv <- function(x, classes,
 	alpha = 0.5,
 	standardize = TRUE,
 	lambda,
+	d = 100,
 	fold = 10L,
 	cv.indices = list(),
 	intercept = TRUE,
@@ -101,152 +115,71 @@ msgl.cv <- function(x, classes,
 	# Get call
 	cl <- match.call()
 
-	#Check dimensions
-	if(nrow(x) != length(classes)) {
-		stop("the number of rows in x must match the length of classes")
-	}
-
 	if(fold > min(table(classes))) {
 		warning("fold larger than the number of samples in the smalest group")
 	}
 
-	if(sum(is.na(classes)) > 0) {
-		stop("classes contains NA values")
-	}
+	setup <- .process_args(
+    x = x,
+    classes = classes,
+		weights = sampleWeights,
+		intercept = intercept,
+		grouping = grouping,
+		groupWeights = groupWeights,
+		parameterWeights = parameterWeights,
+		standardize = standardize,
+		sparse.data = sparse.data
+  )
 
-	# Default values
-	if(is.null(grouping)) {
-		covariateGrouping <- factor(1:ncol(x))
-	} else {
-		# ensure factor
-		covariateGrouping <- factor(grouping)
-	}
-
-	if(is.null(sampleWeights)) {
-		if(length(cv.indices) == 0) {
-			sampleWeights <- rep(fold/(length(classes)*(fold-1)), length(classes))
-		} else {
-			n_train <- sapply(cv.indices, function(x) length(classes)-length(x))
-			sampleWeights <- rep(1/mean(n_train), length(classes))
-		}
-	}
-
-	# cast
-	classes <- factor(classes)
-	fold <- as.integer(fold)
-
-	if(is.null(groupWeights)) {
-		groupWeights <- c(sqrt(length(levels(classes))*table(covariateGrouping)))
-	}
-
-	if(is.null(parameterWeights)) {
-		parameterWeights <-  matrix(1, nrow = length(levels(classes)), ncol = ncol(x))
-	}
-
-	# Standardize
-	if(standardize) {
-
-		if(sparse.data) {
-			x.scale <- sqrt(colMeans(x*x) - colMeans(x)^2)
-			x.center <- rep(0, length(x.scale))
-			x <- x%*%Diagonal(x=1/x.scale)
-		} else {
-			x <- scale(x, if(sparse.data) FALSE else TRUE, TRUE)
-			x.scale <- attr(x, "scaled:scale")
-			x.center <- if(sparse.data) rep(0, length(x.scale)) else attr(x, "scaled:center")
-		}
-	}
-
-	if(intercept) {
-		intercept.value = 1
-	} else {
-		intercept.value = 0
-	}
-	# add intercept
-	if(is.null(colnames(x))) {
-		x <- cBind(rep(intercept.value, nrow(x)), x)
-	} else {
-		x <- cBind(Intercept = rep(intercept.value, nrow(x)), x)
-	}
-
-	groupWeights <- c(0, groupWeights)
-	parameterWeights <- cbind(rep(0, length(levels(classes))), parameterWeights)
-	covariateGrouping <- factor(c("Intercept", as.character(covariateGrouping)), levels = c("Intercept", levels(covariateGrouping)))
-
-	# create data
-	data <- create.sgldata(x, y = NULL, sampleWeights, classes, sparseX = sparse.data)
+	data <- setup$data
 
 	# call sglOptim function
-	if(data$sparseX) {
+	if(algorithm.config$verbose) {
 
-		if(algorithm.config$verbose) {
+		if(data$sparseX) {
 			cat(paste("Running msgl ", max(length(cv.indices), fold)," fold cross validation (sparse design matrix)\n\n", sep=""))
-			print(data.frame('Samples: ' = print_with_metric_prefix(length(sampleWeights)),
-							'Features: ' = print_with_metric_prefix(data$n.covariate),
-							'Classes: ' = print_with_metric_prefix(length(levels(classes))),
-							'Groups: ' = print_with_metric_prefix(length(unique(covariateGrouping))),
-							'Parameters: ' = print_with_metric_prefix(length(parameterWeights)),
-							check.names = FALSE),
-					row.names = FALSE, digits = 2, right = TRUE)
-			cat("\n")
-		}
-
-		res <- sgl_cv("msgl_sparse", "msgl",
-			data = data,
-			parameterGrouping = covariateGrouping,
-			groupWeights = groupWeights,
-			parameterWeights = parameterWeights,
-			alpha = alpha,
-			lambda = lambda,
-			fold = fold,
-			cv.indices = cv.indices,
-			max.threads = max.threads,
-			use_parallel = use_parallel,
-			algorithm.config = algorithm.config
-			)
-
-	} else {
-
-		if(algorithm.config$verbose) {
+		} else {
 			cat(paste("Running msgl ", max(length(cv.indices), fold)," fold cross validation (dense design matrix)\n\n", sep=""))
-			print(data.frame('Samples: ' = print_with_metric_prefix(length(sampleWeights)),
-							'Features: ' = print_with_metric_prefix(data$n.covariate),
-							'Classes: ' = print_with_metric_prefix(length(levels(classes))),
-							'Groups: ' = print_with_metric_prefix(length(unique(covariateGrouping))),
-							'Parameters: ' = print_with_metric_prefix(length(parameterWeights)),
-							check.names = FALSE),
-					row.names = FALSE, digits = 2, right = TRUE)
-			cat("\n")
 		}
 
-		res <- sgl_cv("msgl_dense", "msgl",
-			data = data,
-			parameterGrouping = covariateGrouping,
-			groupWeights = groupWeights,
-			parameterWeights = parameterWeights,
-			alpha = alpha,
-			lambda = lambda,
-			fold = fold,
-			cv.indices = cv.indices,
-			max.threads = max.threads,
-			use_parallel = use_parallel,
-			algorithm.config = algorithm.config
-			)
-
+		print(data.frame(
+			'Samples: ' = print_with_metric_prefix(data$n_samples),
+			'Features: ' = print_with_metric_prefix(data$n_covariate),
+			'Classes: ' = print_with_metric_prefix(data$response_dimension),
+			'Groups: ' = print_with_metric_prefix(length(unique(setup$grouping))),
+			'Parameters: ' = print_with_metric_prefix(length(setup$parameterWeights)),
+			check.names = FALSE),
+			row.names = FALSE, digits = 2, right = TRUE)
+		cat("\n")
 	}
 
-	### Responses
-	res$classes <- t(res$responses$classes)
-	res$response <- res$responses$response
-	res$link <- res$responses$link
+
+	res <- sgl_cv(
+		module_name = setup$callsym,
+		PACKAGE = "msgl",
+		data = data,
+		parameterGrouping = setup$grouping,
+		groupWeights = setup$groupWeights,
+		parameterWeights = setup$parameterWeights,
+		alpha =  alpha,
+		lambda = lambda,
+		d = d,
+		fold = fold,
+		cv.indices = cv.indices,
+		responses = c("link", "response", "classes"),
+		max.threads = max.threads,
+		use_parallel = use_parallel,
+		algorithm.config = algorithm.config
+	)
+
+  ### Responses
+	res$classes <- apply(res$responses$classes, 2, function(x) setup$class_names[x])
+	dimnames(res$classes) <- dimnames(res$responses$classes)
+	attr(res$classes, "type") <- attr(res$responses$classes, "type")
+
+	res$response <- transpose_response_elements(res$responses$response)
+	res$link <- transpose_response_elements(res$responses$link)
 	res$responses <- NULL
-
-	# Set class names
-	if(!is.null(data$group.names)) {
-		res$classes <- apply(X = res$classes, MARGIN = c(1,2), FUN = function(x) data$group.names[x])
-		res$link <- lapply(X = res$link, FUN = function(m) {rownames(m) <- data$group.names; m})
-		res$response <- lapply(X = res$response, FUN = function(m) {rownames(m) <- data$group.names; m})
-	}
 
 	# True classes
 	res$classes.true <- classes
@@ -258,3 +191,46 @@ msgl.cv <- function(x, classes,
 	class(res) <- "msgl"
 	return(res)
 }
+
+#' Deprecated cv function
+#'
+#' @keywords internal
+#' @export
+msgl.cv <- function(x, classes,
+	sampleWeights = NULL,
+	grouping = NULL,
+	groupWeights = NULL,
+	parameterWeights = NULL,
+	alpha = 0.5,
+	standardize = TRUE,
+	lambda,
+	d = 100,
+	fold = 10L,
+	cv.indices = list(),
+	intercept = TRUE,
+	sparse.data = is(x, "sparseMatrix"),
+	max.threads = NULL,
+	use_parallel = FALSE,
+	algorithm.config = msgl.standard.config) {
+
+	warning("msgl.cv is deprecated, use msgl::cv")
+
+	msgl::cv(
+		x,
+		classes,
+		sampleWeights,
+		grouping,
+		groupWeights,
+		parameterWeights,
+		alpha,
+		standardize,
+		lambda,
+		d,
+		fold,
+		cv.indices,
+		intercept,
+		sparse.data,
+		max.threads,
+		use_parallel,
+		algorithm.config)
+	}
