@@ -19,9 +19,6 @@
 //Uncomment to turn on debuging
 //#undef NDEBUG
 
-//Should the timers be activated (only needed for profiling the code)
-//#define DO_TIMING
-
 //Configuration
 //Debugging
 #ifndef NDEBUG
@@ -42,6 +39,12 @@
 
 // print information abt convergence
 //#define SGL_DEBUG_INFO_QUADRATIC
+
+//Should the timers be activated (only needed for profiling the code)
+//#define DO_TIMING
+
+// Show function entering/leaving
+//#define FUNC_ENTER
 
 //Sgl optimizer
 #include <sgl.h>
@@ -105,18 +108,24 @@
 #include <R_ext/Rdynload.h>
 
 static const R_CallMethodDef sglCallMethods[] = {
-		SGL_LAMBDA(msgl_dense), SGL_LAMBDA(msgl_sparse),
-		SGL_FIT(msgl_dense), SGL_FIT(msgl_sparse),
-		SGL_PREDICT(msgl_dense), SGL_PREDICT(msgl_sparse),
-    SGL_SUBSAMPLING(msgl_dense), SGL_SUBSAMPLING(msgl_sparse),
-		{NULL}};
+
+  SGL_LAMBDA(msgl_dense), SGL_LAMBDA(msgl_sparse),
+  SGL_FIT(msgl_dense), SGL_FIT(msgl_sparse),
+  SGL_PREDICT(msgl_dense), SGL_PREDICT(msgl_sparse),
+  SGL_SUBSAMPLING(msgl_dense), SGL_SUBSAMPLING(msgl_sparse),
+
+  {"r_pkg_c_config", (DL_FUNC) &r_pkg_c_config, 0},
+
+  {NULL, NULL, 0}
+};
 
 extern "C" {
-	void R_init_msgl(DllInfo *info);
+  void R_init_msgl(DllInfo *info);
 }
 
 void R_init_msgl(DllInfo *info)
 {
-	// Register the .Call routines.
-	R_registerRoutines(info, NULL, sglCallMethods, NULL, NULL);
+  // Register the .Call routines.
+  R_registerRoutines(info, NULL, sglCallMethods, NULL, NULL);
+  R_useDynamicSymbols(info, FALSE);
 }

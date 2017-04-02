@@ -37,20 +37,37 @@
 		stop("the number of rows in x must match the length of classes")
 	}
 
+ # Check for NA values
   if(sum(is.na(classes)) > 0) {
-  		stop("classes contains NA values")
+    stop("classes contains NA values")
   }
 
-	# Default values
-	if(is.null(grouping)) {
-		grouping <- factor(1:ncol(x))
-	} else {
-		# ensure factor
-		grouping <- factor(grouping)
+  if(sum(is.na(x)) > 0) {
+    stop("x contains NA values")
+  }
+
+  # Default values
+  if( is.null(grouping) ) {
+
+    grouping <- factor(1:ncol(x))
+
+  } else {
+
+    # ensure factor
+    if( any(is.na(grouping)) ) {
+      stop("grouping contains NA values")
+    }
+
+    if( length(grouping) != ncol(x) ) {
+      stop("the length of grouping must be equal to the number of covariates")
+    }
+
+    grouping <- factor(grouping)
 	}
 
   if( is.null(weights) ) {
     weights <- rep(1/nrow(x), nrow(x))
+    names(weights) <- rownames(x)
   }
 
 	# cast
@@ -71,15 +88,19 @@
 	# Standardize
 	if(standardize) {
 
-		if(sparse.data) {
-			x.scale <- sqrt(colMeans(x*x) - colMeans(x)^2)
+    if(sparse.data) {
+      x.scale <- sqrt(colMeans(x*x) - colMeans(x)^2)
       x.center <- rep(0, length(x.scale))
       x <- x%*%Diagonal(x=1/x.scale)
-		} else {
-			x <- scale(x, if(sparse.data) FALSE else TRUE, TRUE)
-			x.scale <- attr(x, "scaled:scale")
-			x.center <- if(sparse.data) rep(0, length(x.scale)) else attr(x, "scaled:center")
-		}
+    } else {
+      x <- scale(x, TRUE, TRUE)
+      x.scale <- attr(x, "scaled:scale")
+      x.center <- attr(x, "scaled:center")
+    }
+
+    if(sum(is.na(x)) > 0) {
+      stop("x contains NA values after standardization, try 'standardize = FALSE'")
+    }
 	}
 
   if(intercept) {
@@ -94,8 +115,12 @@
 
     groupWeights <- c(0, groupWeights)
 
-    parameterWeights <- cbind(rep(0, length(levels(classes))), parameterWeights)
-    colnames(parameterWeights)[1] <- "Intercept"
+
+    if( is.null(colnames(parameterWeights)) ) {
+      parameterWeights <- cBind(rep(0, length(levels(classes))), parameterWeights)
+    } else {
+      parameterWeights <- cBind(Intercept = rep(0, length(levels(classes))), parameterWeights)
+    }
 
     grouping <- factor(c("Intercept", as.character(grouping)), levels = c("Intercept", levels(grouping)))
 

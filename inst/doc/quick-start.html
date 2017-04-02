@@ -12,7 +12,7 @@
 
 <meta name="author" content="Martin Vincent" />
 
-<meta name="date" content="2016-12-28" />
+<meta name="date" content="2017-04-02" />
 
 <title>Quick Start</title>
 
@@ -70,21 +70,15 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 <h1 class="title toc-ignore">Quick Start</h1>
 <h4 class="author"><em>Martin Vincent</em></h4>
-<h4 class="date"><em>2016-12-28</em></h4>
+<h4 class="date"><em>2017-04-02</em></h4>
 
 
 
-<div id="quick-start-for-msgl-version-2.3.5" class="section level2">
-<h2>Quick Start (for msgl version 2.3.5)</h2>
+<div id="quick-start-for-msgl-version-2.3.6" class="section level2">
+<h2>Quick Start (for msgl version 2.3.6)</h2>
 <div id="load-the-msgl-library-in-r" class="section level3">
 <h3>1. Load the msgl library in R</h3>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(msgl)</code></pre></div>
-<pre><code>## Loading required package: Matrix</code></pre>
-<pre><code>## Loading required package: sglOptim</code></pre>
-<pre><code>## Loading required package: foreach</code></pre>
-<pre><code>## Loading required package: doParallel</code></pre>
-<pre><code>## Loading required package: iterators</code></pre>
-<pre><code>## Loading required package: parallel</code></pre>
 </div>
 <div id="load-your-data" class="section level3">
 <h3>2. Load your data</h3>
@@ -140,18 +134,18 @@ fit.cv &lt;-<span class="st"> </span>msgl::<span class="kw">cv</span>(x, classes
 ## Models:
 ## 
 ##  Index:  Lambda:  Features:  Parameters:  Error: 
-##        1     1.00        1.4         11.3    0.93
-##       20     0.64       12.7           75    0.54
-##       40     0.40       31.9        168.3    0.23
-##       60     0.25       43.3        226.7    0.17
-##       80     0.16         54        282.8    0.14
-##      100     0.10       65.5        342.3    0.14
+##        1     1.00        1.7         12.5    0.96
+##       20     0.64       12.3         72.7    0.51
+##       40     0.40       31.1        165.4    0.28
+##       60     0.25       43.3        223.9    0.17
+##       80     0.16       54.3        281.1    0.13
+##      100     0.10         67        346.8    0.12
 ## 
 ## Best model:
 ## 
 ##  Index:  Lambda:  Features:  Parameters:  Error: 
-##       86     0.14         58        302.3    0.14</code></pre>
-<p>Hence, the best model is obtained using lambda index 86 and it has a cross validation error of 0.14. The expected number of selected features is 58 and the expected number of parameters is 302.3.</p>
+##       79     0.16       53.5        276.9    0.12</code></pre>
+<p>Hence, the best model is obtained using lambda index 79 and it has a cross validation error of 0.12. The expected number of selected features is 53.5 and the expected number of parameters is 276.9.</p>
 </div>
 <div id="fit-the-final-model" class="section level3">
 <h3>4. Fit the final model</h3>
@@ -177,7 +171,7 @@ fit.cv &lt;-<span class="st"> </span>msgl::<span class="kw">cv</span>(x, classes
 ##       60     0.25         43          230
 ##       80     0.16         48          250
 ##      100     0.10         67          345</code></pre>
-<p><strong>Take a look at the estimated models.</strong> As we saw in the previous step the model with index 86 had the best cross validation error, we may take a look at the included features using the command:</p>
+<p><strong>Take a look at the estimated models.</strong> As we saw in the previous step the model with index 79 had the best cross validation error, we may take a look at the included features using the command:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">features</span>(fit)[[<span class="kw">best_model</span>(fit.cv)]] <span class="co"># Non-zero features in best model</span></code></pre></div>
 <pre><code>##  [1] &quot;Intercept&quot;   &quot;let.7c&quot;      &quot;miR.10a&quot;     &quot;miR.17&quot;      &quot;miR.21&quot;     
 ##  [6] &quot;miR.27a&quot;     &quot;miR.34a&quot;     &quot;miR.92a&quot;     &quot;miR.99b&quot;     &quot;miR.122&quot;    
@@ -186,49 +180,48 @@ fit.cv &lt;-<span class="st"> </span>msgl::<span class="kw">cv</span>(x, classes
 ## [21] &quot;miR.181a&quot;    &quot;miR.182&quot;     &quot;miR.187&quot;     &quot;miR.191&quot;     &quot;miR.192&quot;    
 ## [26] &quot;miR.196b&quot;    &quot;miR.199a.3p&quot; &quot;miR.203&quot;     &quot;miR.205&quot;     &quot;miR.210&quot;    
 ## [31] &quot;miR.214&quot;     &quot;miR.216a&quot;    &quot;miR.221&quot;     &quot;miR.223&quot;     &quot;miR.224&quot;    
-## [36] &quot;miR.302b&quot;    &quot;miR.338.3p&quot;  &quot;miR.484&quot;     &quot;miR.505&quot;     &quot;miR.508.3p&quot; 
-## [41] &quot;miR.518f&quot;    &quot;miR.526b&quot;    &quot;miR.532.3p&quot;  &quot;miR.548d.3p&quot; &quot;miR.570&quot;    
-## [46] &quot;miR.615.5p&quot;  &quot;miR.625&quot;     &quot;miR.628.5p&quot;  &quot;miR.654.3p&quot;  &quot;miR.885.5p&quot; 
-## [51] &quot;miR.891a&quot;    &quot;miR.492&quot;     &quot;miR.506&quot;</code></pre>
-<p>Hence 53 features are included in the model, this is close to the expected number based on the cross validation estimate.</p>
-<p>The sparsity structure of the parameters belonging to these 53 features may be viewed using</p>
+## [36] &quot;miR.302b&quot;    &quot;miR.338.3p&quot;  &quot;miR.484&quot;     &quot;miR.505&quot;     &quot;miR.518f&quot;   
+## [41] &quot;miR.526b&quot;    &quot;miR.532.3p&quot;  &quot;miR.548d.3p&quot; &quot;miR.615.5p&quot;  &quot;miR.625&quot;    
+## [46] &quot;miR.628.5p&quot;  &quot;miR.885.5p&quot;  &quot;miR.891a&quot;</code></pre>
+<p>Hence 48 features are included in the model, this is close to the expected number based on the cross validation estimate.</p>
+<p>The sparsity structure of the parameters belonging to these 48 features may be viewed using</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">parameters</span>(fit)[[<span class="kw">best_model</span>(fit.cv)]]</code></pre></div>
-<pre><code>## 9 x 53 sparse Matrix of class &quot;lgCMatrix&quot;</code></pre>
-<pre><code>##    [[ suppressing 53 column names 'Intercept', 'let.7c', 'miR.10a' ... ]]</code></pre>
+<pre><code>## 9 x 48 sparse Matrix of class &quot;lgCMatrix&quot;</code></pre>
+<pre><code>##    [[ suppressing 48 column names 'Intercept', 'let.7c', 'miR.10a' ... ]]</code></pre>
 <pre><code>##                                                                          
 ## Breast    | | | . . . . | . | . . | | . . . . | | | | | | | | | | | | | |
-## CCA       | . | | | | | . | | | . . . . | . . . | | . | . . | . | | . | |
+## CCA       | . | | | | | | | | | . . . . | . . . | | . | . . | . | | . | |
 ## Cirrhosis | . . . | | . . . | | | . . | | | . . . . . . | . | | | . . | .
-## CRC       | | | | . | | | | | . | . . | . | . | | . | | . | | . | . | . .
-## EG        | . . | . . . . . | | . | | | | . | | . . | . | | | . | . | | .
-## HCC       | . | | . | | | . | | | . . | | . . . | . . | | . . | | . . | |
+## CRC       | | | | . | | | | | . | . . | . | . | | . | | . | | . | | | | .
+## EG        | . . | . . . . . | | . | | | | . | | . . | . | | | . | . | . .
+## HCC       | . | | . | | | . | | | . . | | . . . | . . | . . . | | . . | |
 ## Liver     | | | . | | | | | | . . . . | | | | | | | . | . | | . . | . | .
 ## Pancreas  | | | | | | | | . | | | | . | | . . | . | . | . . . | . . | | |
 ## Squamous  | . . | . . . | . | . | | | . | | . . | | . | | | . | | | | | .
-##                                                    
-## Breast    | | | . . . | . . | . | | | | . | . . . .
-## CCA       | | . | | | | | | . | | . | | | | . | | |
-## Cirrhosis | | | . | . . | | | | | | | | | | | | | |
-## CRC       | . | . . . . . . . . | | | . . . | | . .
-## EG        | . | | | . | | | | | | | | | . | | | . |
-## HCC       | | | . | | . . . | | . . . | . . | . . .
-## Liver     | . | . | | | | . | | | | . . . | | . | .
-## Pancreas  . . . | . | | . . . | | | . . . | | | | |
-## Squamous  | | | . | . . . . . . . . . . . . . . . .</code></pre>
+##                                          
+## Breast    | | | . . . | . | . | | | . . .
+## CCA       | | . | | | | | . | | | | | . |
+## Cirrhosis | | | . | . . | | | | | | | | |
+## CRC       | . | . . . . . . . | | . . | |
+## EG        | . | | | . | | | | | | | . | |
+## HCC       | | | . | | . . | | . . | . | .
+## Liver     | . | . | | | . | | . . . . | .
+## Pancreas  . . . . . | | . . | | . . . | |
+## Squamous  | | | . | . . . . . . . . . . .</code></pre>
 <p>We may also take a look at the estimate parameters (or coefficients)</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">coef</span>(fit, <span class="kw">best_model</span>(fit.cv))[,<span class="dv">1</span>:<span class="dv">5</span>] <span class="co"># First 5 non-zero parameters of best model</span></code></pre></div>
 <pre><code>## 9 x 5 sparse Matrix of class &quot;dgCMatrix&quot;
-##            Intercept     let.7c     miR.10a       miR.17      miR.21
-## Breast     1.6855207 -0.1835078  0.42757013  .            .         
-## CCA       -5.6945211  .         -0.07849334  0.445093420 -0.24076978
-## Cirrhosis  2.5466498  .          .           .            0.19283340
-## CRC       -4.3557707  1.4881267 -1.34554218 -1.665796232  .         
-## EG         3.1864493  .          .           0.255711038  .         
-## HCC        0.6712489  .          1.33418100 -0.337340600  .         
-## Liver      1.9736792 -0.6841190  0.02635424  .            0.29593275
-## Pancreas   2.4886878 -0.5117927 -0.97662326  1.608377508 -0.03819527
-## Squamous   3.2801128  .          .          -0.004670857  .</code></pre>
-<p>If we count the total number of non-zero parameters in the model we get, in this case 275 which is close to the expected based on the cross validation estimate.</p>
+##            Intercept     let.7c     miR.10a      miR.17      miR.21
+## Breast     1.9878916 -0.1584741  0.36069273  .           .         
+## CCA       -5.1225689  .         -0.06873300  0.43649019 -0.16453017
+## Cirrhosis  2.2972566  .          .           .           0.13574843
+## CRC       -3.9530078  1.3779491 -1.22697934 -1.51828039  .         
+## EG         2.6625136  .          .           0.17810433  .         
+## HCC        0.7163322  .          1.21986449 -0.32891377  .         
+## Liver      1.7467475 -0.6451481  0.02854112  .           0.20917562
+## Pancreas   2.2165935 -0.4771551 -0.86238089  1.49733450 -0.02583901
+## Squamous   3.2212960  .          .          -0.01105621  .</code></pre>
+<p>If we count the total number of non-zero parameters in the model we get, in this case 250 which is close to the expected based on the cross validation estimate.</p>
 </div>
 <div id="use-your-model-for-predictions" class="section level3">
 <h3>6. Use your model for predictions</h3>
@@ -251,25 +244,25 @@ res$classes[,<span class="kw">best_model</span>(fit.cv)] <span class="co"># Clas
 <p>We may also get the estimated probabilities for each of the classes</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">res$response[[<span class="kw">best_model</span>(fit.cv)]]</code></pre></div>
 <pre><code>##             P-544-ME    P-554-NW    P-559-OI    P-564-MO    P-579-MY
-## Breast    0.34498690 0.002792285 0.005996772 0.007163726 0.131685017
-## CCA       0.14133557 0.021275517 0.051999915 0.028327222 0.044122906
-## Cirrhosis 0.01886155 0.367601180 0.020613525 0.227294778 0.004426578
-## CRC       0.04713724 0.002614093 0.074877699 0.007438449 0.747329294
-## EG        0.02909340 0.044067912 0.697064421 0.037769510 0.012597340
-## HCC       0.03239314 0.037234555 0.022754389 0.058457432 0.009365618
-## Liver     0.01312646 0.513399253 0.037706577 0.624709821 0.002725093
-## Pancreas  0.02725561 0.008346044 0.083880751 0.006756721 0.039025695
-## Squamous  0.34581013 0.002669161 0.005105950 0.002082341 0.008722459
+## Breast    0.33627002 0.003666898 0.008523101 0.008627094 0.130026884
+## CCA       0.13641710 0.025887719 0.060940179 0.033031249 0.052193341
+## Cirrhosis 0.02247195 0.363252449 0.025993919 0.230733936 0.005976374
+## CRC       0.04995516 0.003485091 0.086118638 0.008932482 0.722077041
+## EG        0.03419886 0.049890174 0.646124032 0.043272701 0.017048453
+## HCC       0.03631994 0.045089311 0.026997086 0.064561217 0.011357562
+## Liver     0.01538208 0.495049468 0.044679321 0.599770061 0.003780372
+## Pancreas  0.03196045 0.010330388 0.094168330 0.008467384 0.046820162
+## Squamous  0.33702443 0.003348502 0.006455393 0.002603876 0.010719812
 ##              P-590-OU    P-598-PO   Q-199-AB   Q-250-GS    Q-278-DK
-## Breast    0.015382429 0.004562008 0.04342990 0.02062219 0.019833523
-## CCA       0.020756347 0.017019175 0.14454934 0.64051753 0.191789619
-## Cirrhosis 0.010877781 0.132216804 0.01218625 0.09572533 0.013338561
-## CRC       0.763032118 0.006113376 0.13220219 0.03607028 0.057734792
-## EG        0.100358916 0.048757494 0.51183520 0.03327640 0.583803006
-## HCC       0.044016223 0.092917684 0.05615446 0.04741534 0.008915731
-## Liver     0.007124862 0.684468259 0.01349342 0.01305300 0.003731763
-## Pancreas  0.030202909 0.011685993 0.06707729 0.08586810 0.078074532
-## Squamous  0.008248416 0.002259208 0.01907196 0.02745183 0.042778474</code></pre>
+## Breast    0.019390971 0.005849053 0.05118576 0.02535852 0.024274445
+## CCA       0.026080899 0.020739952 0.15383764 0.58631772 0.190637703
+## Cirrhosis 0.013410862 0.145627293 0.01485218 0.10756259 0.016026246
+## CRC       0.724310763 0.007748708 0.14209746 0.04189463 0.065161953
+## EG        0.114340630 0.051883054 0.47482377 0.04128660 0.553169644
+## HCC       0.047876502 0.103784661 0.05630570 0.05330133 0.011092432
+## Liver     0.009547294 0.647171393 0.01621118 0.01737776 0.004748464
+## Pancreas  0.035241630 0.014386857 0.06862632 0.09484092 0.086934576
+## Squamous  0.009800449 0.002809030 0.02205999 0.03205991 0.047954538</code></pre>
 </div>
 </div>
 
