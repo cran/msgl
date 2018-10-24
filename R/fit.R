@@ -68,7 +68,8 @@
 #' table(classes)
 #
 #' # Fit multinomial sparse group lasso regularization path
-#' # Using a lambda sequence ranging from the maximal lambda to 0.5 * maximal lambda
+#' # using a lambda sequence ranging from the maximal lambda to 0.5 * maximal lambda
+#' 
 #' fit <- msgl::fit(x, classes, alpha = 0.5, lambda = 0.5)
 #'
 #' # Print some information about the fit
@@ -185,6 +186,58 @@ return(res)
 
 }
 
+#' C interface
+#'
+#' @keywords internal
+#' @export
+msgl_dense_sgl_fit_R <- function(
+  data,
+  block_dim,
+  groupWeights,
+  parameterWeights,
+  alpha,
+  lambda,
+  idx,
+  algorithm.config) {
+  
+  .Call(msgl_dense_sgl_fit, PACKAGE = "msgl",
+        data,
+        block_dim,
+        groupWeights,
+        parameterWeights,
+        alpha,
+        lambda,
+        idx,
+        algorithm.config
+  )
+}
+
+#' C interface
+#'
+#' @keywords internal
+#' @export
+msgl_sparse_sgl_fit_R <- function(
+  data,
+  block_dim,
+  groupWeights,
+  parameterWeights,
+  alpha,
+  lambda,
+  idx,
+  algorithm.config) {
+  
+  .Call(msgl_sparse_sgl_fit, PACKAGE = "msgl",
+        data,
+        block_dim,
+        groupWeights,
+        parameterWeights,
+        alpha,
+        lambda,
+        idx,
+        algorithm.config
+  )
+}
+
 #' Deprecated fit function
 #'
 #' @keywords internal
@@ -243,12 +296,12 @@ msgl <- function(
     beta.org <- t(t(beta[[l]])*1/x.scale)
 
     if( is.null(colnames(beta.org)) ) {
-      beta.org <- cBind(
+      beta.org <- cbind(
         -colSums(t(beta[[l]])*(x.center/x.scale)),
         beta.org
       )
     } else {
-      beta.org <- cBind(
+      beta.org <- cbind(
         Intercept =  -colSums(t(beta[[l]])*(x.center/x.scale)),
         beta.org
       )

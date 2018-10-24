@@ -47,6 +47,9 @@ parameters(fit)[[best_model(fit.cv)]]
 ## ------------------------------------------------------------------------
 coef(fit, best_model(fit.cv))[,1:5] # First 5 non-zero parameters of best model
 
+## ---- eval=FALSE---------------------------------------------------------
+#  x.test <- # load matrix with test data (of size M x p)
+
 ## ------------------------------------------------------------------------
 res <- predict(fit, x.test)
 
