@@ -1,8 +1,8 @@
 Package: msgl
 Type: Package
 Title: Multinomial Sparse Group Lasso
-Version: 2.3.7
-Date: 2018-10-18
+Version: 2.3.8
+Date: 2019-01-02
 Authors@R: c(
         person("Martin", "Vincent", role = "aut"),
         person("Niels", "Richard Hansen", email = "niels.r.hansen@math.ku.dk", role = c("ctb", "cre"))
@@ -30,9 +30,9 @@ VignetteBuilder: knitr
 RoxygenNote: 6.1.0
 Encoding: UTF-8
 NeedsCompilation: yes
-Packaged: 2018-10-22 09:05:52 UTC; xqz683
+Packaged: 2019-01-02 21:58:28 UTC; xqz683
 Author: Martin Vincent [aut],
   Niels Richard Hansen [ctb, cre]
 Maintainer: Niels Richard Hansen <niels.r.hansen@math.ku.dk>
 Repository: CRAN
-Date/Publication: 2018-10-24 11:50:03 UTC
+Date/Publication: 2019-01-04 10:00:03 UTC

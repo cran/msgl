@@ -1,4 +1,4 @@
-3105dcb599f6ec24159b06bbf454729f *DESCRIPTION
+f90502041ed47dd0d28616db5649b5d5 *DESCRIPTION
 ae390723b6e3d4c96294a11275240d5d *NAMESPACE
 811cf2499c7144ad68a02f455cd31522 *R/config.R
 a6c6cf2b28dbd46726d19c8cbe08a278 *R/cv.R
@@ -10,17 +10,17 @@ d73970a72efc39fa18f208a3ad82918f *R/predict.R
 f04ac026a9cc01d36c6d6546ced581c1 *R/process-arguments.R
 2bf739de264ff4607880cc2c21bbd5b7 *R/startup.R
 318443adeb53c1a47c5bea379c3e0a8f *R/subsampling.R
-72aafc276a5f567b075e99508edfc243 *build/vignette.rds
+a37b621a3725de384b471328b2e8d027 *build/vignette.rds
 a319c1bc25972924bf192cad10771451 *data/PrimaryCancers.RData
 92b0322eb9f6ab2f9d30682ee69ae991 *data/SimData.RData
 03138b092ae12c47a3ed0098d51264c1 *inst/CITATION
 99ce1ce5edd6e716fd364aa0c6cd328f *inst/NEWS.Rd
 dc88836c32ead9c48b05f29b6e88fdbd *inst/doc/README.R
-eda43b8d5b628fdcf9ee42a3b95bf0da *inst/doc/README.Rmd
-3613cbf6bf504d84dac569ba8a6bc421 *inst/doc/README.html
-afd9ca6916ec1bcbb368542926b20b10 *inst/doc/quick-start.R
-9f122d03f174b0b588f59270fbee36d4 *inst/doc/quick-start.Rmd
-1cf7387e9ad4ed244b0b734e198530e7 *inst/doc/quick-start.html
+b2c4206d738792d33baed08dba6d5fba *inst/doc/README.Rmd
+6d6bc4839f596a7b1f232ca8917bf9ee *inst/doc/README.html
+afd9ca6916ec1bcbb368542926b20b10 *inst/doc/msgl-getting-started.R
+93d93b6df41db236fa62462900e2b849 *inst/doc/msgl-getting-started.Rmd
+ee2654ff540e3058d1b6ec872cb6f415 *inst/doc/msgl-getting-started.html
 0645d3848fd4a38faf48505dd5976dbc *man/Err.msgl.Rd
 9954054be8769f32fbfdd2a58d2f7ce4 *man/PrimaryCancers.Rd
 fc5e07a75dec01f4a3c0042ef9c9576d *man/SimData.Rd
@@ -61,5 +61,5 @@ f3eebb085515acd960d0ef114101cd3e *src/Makevars
 358eebead588ab526adbce909a5caa72 *src/multinomial_loss.h
 a3c57a34ef3f2fd82e768d8dbca1e008 *src/multinomial_response.h
 3a3361919d3c78b08ccb7eb58df6727a *src/pkg_c_config.h
-eda43b8d5b628fdcf9ee42a3b95bf0da *vignettes/README.Rmd
-9f122d03f174b0b588f59270fbee36d4 *vignettes/quick-start.Rmd
+b2c4206d738792d33baed08dba6d5fba *vignettes/README.Rmd
+93d93b6df41db236fa62462900e2b849 *vignettes/msgl-getting-started.Rmd
