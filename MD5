@@ -1,4 +1,4 @@
-f90502041ed47dd0d28616db5649b5d5 *DESCRIPTION
+94fd3c3f12879f5141352a143ba02a60 *DESCRIPTION
 ae390723b6e3d4c96294a11275240d5d *NAMESPACE
 811cf2499c7144ad68a02f455cd31522 *R/config.R
 a6c6cf2b28dbd46726d19c8cbe08a278 *R/cv.R
@@ -17,10 +17,10 @@ a319c1bc25972924bf192cad10771451 *data/PrimaryCancers.RData
 99ce1ce5edd6e716fd364aa0c6cd328f *inst/NEWS.Rd
 dc88836c32ead9c48b05f29b6e88fdbd *inst/doc/README.R
 b2c4206d738792d33baed08dba6d5fba *inst/doc/README.Rmd
-6d6bc4839f596a7b1f232ca8917bf9ee *inst/doc/README.html
+2fa5866330b6959eb4e0f323136dbe47 *inst/doc/README.html
 afd9ca6916ec1bcbb368542926b20b10 *inst/doc/msgl-getting-started.R
 93d93b6df41db236fa62462900e2b849 *inst/doc/msgl-getting-started.Rmd
-ee2654ff540e3058d1b6ec872cb6f415 *inst/doc/msgl-getting-started.html
+c0b540f3d85f2a4f02767c9bfe85da7a *inst/doc/msgl-getting-started.html
 0645d3848fd4a38faf48505dd5976dbc *man/Err.msgl.Rd
 9954054be8769f32fbfdd2a58d2f7ce4 *man/PrimaryCancers.Rd
 fc5e07a75dec01f4a3c0042ef9c9576d *man/SimData.Rd
@@ -56,7 +56,7 @@ dfc392c6bf0fc94cb5323a24f18abdff *man/msgl_sparse_sgl_predict_R.Rd
 49c06127042a5b28c5ac235107445932 *man/print.msgl.Rd
 e81e4d9759202d89651822ceb97977a9 *man/subsampling.Rd
 21aeea3bae1f464a836e5d11ab450f62 *man/x.Rd
-f3eebb085515acd960d0ef114101cd3e *src/Makevars
+c975b472777e322746e572647a2223b9 *src/Makevars
 780399e02f277f9476096566140ca34f *src/msgl.cpp
 358eebead588ab526adbce909a5caa72 *src/multinomial_loss.h
 a3c57a34ef3f2fd82e768d8dbca1e008 *src/multinomial_response.h
